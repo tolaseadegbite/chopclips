@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -72,3 +72,13 @@ gem "authentication-zero", "~> 4.0"
 gem "mission_control-jobs"
 gem "ransack", "~> 4.4"
 gem "pagy", "~> 9.4"
+# Use Pwned to check if a password has been found in any of the huge data breaches [https://github.com/philnash/pwned]
+gem "pwned"
+# Use OmniAuth to support multi-provider authentication [https://github.com/omniauth/omniauth]
+gem "omniauth"
+# Provides a mitigation against CVE-2015-9284 [https://github.com/cookpad/omniauth-rails_csrf_protection]
+gem "omniauth-rails_csrf_protection"
+# Use Pwned to check if a password has been found in any of the huge data breaches [https://github.com/philnash/pwned]
+gem "pwned"
+# Use Pwned to check if a password has been found in any of the huge data breaches [https://github.com/philnash/pwned]
+gem "pwned"

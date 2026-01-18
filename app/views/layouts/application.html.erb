@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= full_title(yield(:title)) %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <%# <link rel="icon" href="/icon.svg" type="image/svg+xml"> %>
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag "css-zero/reset", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "css-zero/variables", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "css-zero/utilities", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <%# --- This layout is for PUBLIC and AUTH pages --- %>
+
+  <% auth_pages = controller_name.in?(['sessions', 'passwords', 'registrations', 'password_resets']) %>
+
+  <%# static_pages = controller_name.in?(['static_pages']) %>
+
+  <body class="<%= 'min-b-screen flex flex-col justify-center items-center p-4' if auth_pages %> bg-main"  data-controller="color-scheme">
+
+    <div id="flash_messages">
+      <%= render "layouts/shared/flash" %>
+    </div>
+
+    <% if controller_name == 'static_pages' %>
+      <%= render "layouts/navigation/public/navbar" %>
+    <% end %>
+
+    <% if auth_pages %>
+      <%= yield %>
+    <% else %>
+      <main id="main">
+        <div class="container">
+          <%= yield %>
+        </div>
+      </main>
+    <% end %>
+  </body>
+</html>

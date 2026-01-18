@@ -1,0 +1,58 @@
+/* 1. Prepare the card to contain the background layer */
+.card--selectable {
+  position: relative; /* This is crucial for positioning the ::before pseudo-element */
+  z-index: 1; /* Ensures the card context is ready for layering */
+}
+
+/* 2. Prepare the content to sit on top of the new background layer */
+/* This targets the direct child div that holds all the visible content */
+.card--selectable > .flex {
+  position: relative; /* Lifts the content above the pseudo-element */
+  z-index: 2;         /* Ensures content is always on top */
+}
+
+/* 3. Create a pseudo-element that will act as the gradient layer */
+.card--selectable::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit; /* This makes the gradient layer match the card's rounded corners */
+  background-image: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  
+  /* --- The Key Change: Control Intensity with Opacity --- */
+  opacity: 0; /* Hidden by default */
+  
+  transition: opacity 150ms ease-in-out; /* Adds a smooth fade-in effect */
+  z-index: -1; /* Places this layer behind the card's content */
+}
+
+/* 4. When the card is selected, fade in the gradient layer */
+.card--selectable:has(input[type="radio"]:checked)::before {
+  /* --- ADJUST THIS VALUE TO CHANGE THE "DEPTH" --- */
+  /* A lower value (e.g., 0.1) is lighter, a higher value (e.g., 0.5) is deeper. */
+  opacity: 0.2; 
+}
+
+/* 5. Text color on selection (optional) */
+/* With a lighter background, you might not need to change the text color to white anymore. */
+/* You can uncomment this if you still want the text to change. */
+/*
+.card--selectable:has(input[type="radio"]:checked) .font-semibold,
+.card--selectable:has(input[type="radio"]:checked) .text-subtle {
+  color: white;
+}
+*/
+
+/* --- Keep your existing voice-swatch styles --- */
+.voice-swatch {
+  display: inline-block;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: 9999px;
+  background-image: radial-gradient(circle, #F9A8D4, #EC4899);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  vertical-align: middle;
+}

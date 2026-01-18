@@ -2,11 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 import debounce from "https://esm.sh/just-debounce-it@3.2.0?standalone"
 
 export default class extends Controller {
-  static targets = [ "cancel", "submit" ]
-  static values = { debounceTimeout: { type: Number, default: 300 } }
+  static targets = [ "cancel" ]
 
   initialize() {
-    this.debouncedSubmit = debounce(this.debouncedSubmit.bind(this), this.debounceTimeoutValue)
+    this.debouncedSubmit = debounce(this.submit.bind(this), 300)
   }
 
   submit({ params: { submitter } }) {
@@ -15,27 +14,6 @@ export default class extends Controller {
     } else {
       this.element.requestSubmit()
     }
-  }
-
-  debouncedSubmit(event) {
-    this.submit(event)
-  }
-
-  submitToTopTarget() {
-    this.element.setAttribute("data-turbo-frame", "_top")
-    this.submit()
-  }
-
-  disableSubmitWhenInvalid() {
-    if (this.element.checkValidity()) {
-      this.submitTarget.removeAttribute("disabled")
-    } else {
-      this.submitTarget.toggleAttribute("disabled", true)
-    }
-  }
-
-  reset() {
-    this.element.reset()
   }
 
   cancel() {

@@ -1,0 +1,26 @@
+<div contents data-controller="dialog">
+  <%= trigger %>
+
+  <dialog
+    class="sheet sheet--bottom flex flex-col pbe-4 overflow-hidden"
+    data-dialog-target="content"
+    data-action="click->dialog#closeOnClickOutside"
+    aria-label="<%= label %>">
+
+    <div class="relative shrink-0">
+      <button type="button" class="btn btn--plain absolute text-subtle" style="top: 0.2rem; right: 1rem;" data-action="click->dialog#close">
+        <span class="icon icon--x" aria-hidden="true"></span>
+        <span class="sr-only">Close</span>
+      </button>
+    </div>
+
+    <div class="sheet__content sheet_wrapper pis-3 pie-4 pbs-0 grow flex flex-col min-b-0">
+      <% final_locals = { context: local_assigns.fetch(:context, :mobile) } %>
+      
+      <% final_locals[:form_id] = form_id if local_assigns.key?(:form_id) %>
+      <% final_locals[:generated_audio_clips] = generated_audio_clips if local_assigns.key?(:generated_audio_clips) %>
+
+      <%= render partial: content_partial, locals: final_locals %>
+    </div>
+  </dialog>
+</div>

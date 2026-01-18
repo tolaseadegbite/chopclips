@@ -20,11 +20,6 @@ export default class extends Controller {
 
   navigate(event) {
     switch (event.key) {
-      case " ":
-      case "Enter":
-        this.#cancel(event)
-        this.#activate(event.target)
-        break
       case "ArrowUp":
         this.#cancel(event)
         this.#prev()
@@ -33,28 +28,12 @@ export default class extends Controller {
         this.#cancel(event)
         this.#next()
         break
-      case "Home":
-        this.#cancel(event)
-        this.#first()
-        break
-      case "End":
-        this.#cancel(event)
-        this.#last()
-        break
     }
   }
 
   #cancel(event) {
     event.stopPropagation()
     event.preventDefault()
-  }
-
-  #activate(menuItem) {
-    menuItem.click()
-  }
-
-  #reset([ entry ]) {
-    entry.isIntersecting && this.#first()
   }
 
   #prev() {
@@ -71,19 +50,16 @@ export default class extends Controller {
     }
   }
 
-  #first() {
-    this.indexValue = 0
-    this.#update()
-  }
-
-  #last() {
-    this.indexValue = this.#lastIndex
-    this.#update()
+  #reset([ entry ]) {
+    if (entry.isIntersecting) {
+      this.indexValue = 0
+      this.#update()
+    }
   }
 
   #update() {
     this.#updateTabstops()
-    this.#focusItemAtIndex()
+    this.#focusCurrentItem()
   }
 
   #updateTabstops() {
@@ -92,7 +68,7 @@ export default class extends Controller {
     })
   }
 
-  #focusItemAtIndex() {
+  #focusCurrentItem() {
     this.itemTargets[this.indexValue].focus()
   }
 

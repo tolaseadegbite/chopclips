@@ -13,8 +13,22 @@ Rails.application.routes.draw do
   namespace :authentications do
     resources :events, only: :index
   end
+  get  "/auth/failure",            to: "sessions/omniauth#failure"
+  get  "/auth/:provider/callback", to: "sessions/omniauth#create"
+  post "/auth/:provider/callback", to: "sessions/omniauth#create"
   post "users/:user_id/masquerade", to: "masquerades#create", as: :user_masquerade
+  resource :invitation, only: [:new, :create]
+  namespace :sessions do
+    resource :passwordless, only: [:new, :edit, :create]
+    resource :sudo, only: [:new, :create]
+  end
   root "home#index"
+  get "static_pages/pricing"
+  get "static_pages/privacy"
+  get "static_pages/support"
+  get "static_pages/tos"
+  get "static_pages/privacy_policy"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

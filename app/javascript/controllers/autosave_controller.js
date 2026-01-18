@@ -4,16 +4,17 @@ import { FetchRequest } from "https://esm.sh/@rails/request.js@0.0.12?standalone
 const AUTOSAVE_INTERVAL = 3000
 
 export default class extends Controller {
-  static targets = [ "submit" ]
+  static targets = [ "submitter" ]
 
-  #timer
+  #timer = null
 
   disconnect() {
     this.#submit()
   }
 
   change() {
-    !this.#dirty && this.#scheduleSaveAndUpdateAppearance(false)
+    !this.#dirty && this.#scheduleSave()
+    !this.#dirty && this.#updateAppearance(false)
   }
 
   async #submit() {
@@ -31,18 +32,14 @@ export default class extends Controller {
     return await new FetchRequest(form.method, form.action, { body: new FormData(form) }).perform()
   }
 
-  #scheduleSaveAndUpdateAppearance(saving) {
-    this.#scheduleSave()
-    this.#updateAppearance(false)
+  #updateAppearance(saving) {
+    this.element.ariaBusy = saving
+    this.submitterTarget.ariaDisabled = saving
+    this.submitterTarget.disabled = saving
   }
 
   #scheduleSave() {
     this.#timer = setTimeout(() => this.#save(), AUTOSAVE_INTERVAL)
-  }
-
-  #updateAppearance(saving) {
-    this.element.ariaBusy = saving
-    this.submitTarget.disabled = saving
   }
 
   #resetTimer() {

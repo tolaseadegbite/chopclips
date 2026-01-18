@@ -13,6 +13,7 @@
   }
 
   /* Setup transition */
+  transition-behavior: allow-discrete;
   transition-duration: var(--time-200);
   transition-property: display, overlay, opacity, transform;
 
@@ -36,8 +37,29 @@
     &[open]::backdrop { opacity: 0; }
   }
 
-  @media (width < 40rem) {
-    border-radius: 0;
+  /* --- THE FIX for mobile layout --- */
+  @media (width < 64rem) {
+    /* Position it at the bottom of the screen */
+    margin: 0;
+    margin-block-start: auto;
+    max-inline-size: 100%;
+
+    /* Style it like a bottom sheet */
+    border-start-start-radius: var(--rounded-lg);
+    border-start-end-radius: var(--rounded-lg);
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+    
+    /* Change animation from scaling to sliding up */
+    transform: translateY(100%);
+    &[open] {
+      transform: translateY(0);
+    }
+    @starting-style {
+      &[open] {
+        transform: translateY(100%);
+      }
+    }
   }
 }
 

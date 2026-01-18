@@ -1,5 +1,4 @@
 .menu {
-  background-color: var(--color-surface);
   display: flex;
   flex-direction: column;
   padding: var(--size-1);
@@ -8,7 +7,7 @@
 
 .menu__header {
   font-size: var(--text-sm);
-  font-weight: var(--font-medium);
+  font-weight: var(--font-semibold);
   padding: var(--size-1_5) var(--size-2);
 }
 

@@ -1,13 +1,14 @@
 .btn {
   align-items: center;
-  background-color: var(--btn-background, var(--color-surface));
+  background-color: var(--btn-background, var(--color-bg));
   block-size: var(--btn-block-size, auto);
-  border: 1px solid var(--btn-border-color, var(--color-border));
   border-radius: var(--btn-radius, var(--rounded-md));
+  border: 1px solid var(--btn-border-color, var(--color-border));
   box-shadow: var(--btn-box-shadow, var(--shadow-xs));
   color: var(--btn-color, var(--color-text));
   column-gap: var(--size-2);
-  cursor: default;
+  /* cursor: default; */
+  cursor: pointer;
   display: inline-flex;
   font-size: var(--btn-font-size, var(--text-sm));
   font-weight: var(--btn-font-weight, var(--font-medium));
@@ -45,7 +46,6 @@
 }
 
 .btn--borderless {
-  --btn-background: transparent;
   --btn-border-color: transparent;
   --btn-box-shadow: none;
 }
@@ -76,7 +76,7 @@
   --btn-padding: var(--size-2);
 }
 
-[aria-busy="true"] .btn--busy:disabled {
+[aria-busy="true"] .btn--loading:disabled {
   > * {
     visibility: hidden;
   }

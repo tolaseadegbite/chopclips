@@ -1,0 +1,23 @@
+<div contents data-controller="dialog">
+  <%= raw(trigger) %>
+
+  <dialog class="dialog rounded-2xl"
+          style="--dialog-size: <%= size %>;"
+          data-dialog-target="content"
+          data-action="click->dialog#closeOnClickOutside"
+          aria-label="<%= label %>">
+
+    <button type="button" class="btn btn--plain dialog__close" data-action="click->dialog#close">
+      <span class="icon icon--x" aria-hidden="true"></span>
+      <span class="sr-only">Close</span>
+    </button>
+
+    <div class="dialog__content">
+      <% if title.present? %>
+        <h2 class="font-semibold text-lg mbe-4"><%= title %></h2>
+      <% end %>
+
+      <%= raw(content) %>
+    </div>
+  </dialog>
+</div>

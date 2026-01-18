@@ -2,14 +2,14 @@
 
 .ts-control {
   align-items: center;
-  background-color: var(--color-surface);
+  background-color: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--rounded-md);
+  min-block-size: var(--size-9);
   color: var(--color-text);
   display: inline-flex;
   font-size: var(--text-sm);
   line-height: inherit;
-  min-block-size: var(--size-9);
   padding: var(--size-1_5) var(--size-3);
 
   > input {
@@ -18,7 +18,7 @@
 }
 
 .ts-dropdown {
-  background-color: var(--color-surface);
+  background-color: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--rounded-md);
   box-shadow: var(--shadow-md);
@@ -95,7 +95,7 @@
 }
 
 .ts-wrapper.single .ts-control {
-  background-color: var(--color-surface) !important;
+  background-color: var(--color-bg) !important;
   background-image: url("chevron-down-zinc-500.svg") !important;
   background-position: center right var(--size-2) !important;
   background-repeat: no-repeat !important;

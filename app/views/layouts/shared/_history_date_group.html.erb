@@ -1,0 +1,14 @@
+<%= tag.div class: "flex flex-col gap-2", id: "#{context}_history_date_group_#{date.to_s}" do %>
+
+  <h4 class="text-sm font-semibold bg-shade pi-2 pb-1 rounded-lg mi-auto text-sm">
+    <%= date.strftime("%B %d, %Y") %>
+  </h4>
+
+  <div class="flex flex-col gap-2" id="<%= "#{context}_history_items_for_#{date.to_s}" %>">
+    <%= render partial: "layouts/shared/history_item", 
+               collection: audio_clips, 
+               as: :audio, 
+               locals: { context: context } %>
+  </div>
+
+<% end %>

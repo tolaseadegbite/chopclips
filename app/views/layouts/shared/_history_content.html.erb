@@ -1,0 +1,39 @@
+<% context ||= :desktop %>
+<% generated_audio_clips ||= @generated_audio_clips %>
+
+<% frame_id = "history_results_#{context}" %>
+
+<div class="shrink-0 pbe-2">
+  <%= search_form_for @q,
+      url: request.path,
+      method: :get,
+      html: { data: {
+        turbo_frame: frame_id,
+        controller: "debounce",
+        action: "input->debounce#submit"
+      }} do |f| %>
+
+    <%= hidden_field_tag :service_type, @service_type %>
+    
+    <div class="flex items-center gap-2">
+      <%= f.search_field :text_cont, class: "input i-full", placeholder: "Search history...", autocomplete: 'off' %>
+      <%#= f.submit "Search", class: "btn" %>
+    </div>
+  <% end %>
+</div>
+
+<%= turbo_frame_tag frame_id do %>
+  <div id="history_list_<%= context %>" class="flex flex-col gap-4 grow overflow-y-auto pbs-2">
+    <% if generated_audio_clips.empty? && params.dig(:q, :text_cont).present? %>
+      <div class="text-center text-subtle p-4">No results found for your search.</div>
+    <% else %>
+      <% generated_audio_clips.each do |date, audio_clips_on_date| %>
+        <%= render partial: "layouts/shared/history_date_group", locals: { 
+                   date: date, 
+                   audio_clips: audio_clips_on_date.sort_by(&:created_at).reverse,
+                   context: context 
+                 }, cached: true %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

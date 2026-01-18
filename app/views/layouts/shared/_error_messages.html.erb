@@ -1,0 +1,16 @@
+<% if object.errors.any? %>
+  <div class="alert alert--negative flex items-start mbe-5" role="alert">
+    <span class="icon icon--circle-alert" aria-hidden="true"></span>
+    <div class="flex flex-col mis-3">
+      <h5 class="font-medium leading-none mbe-1">Unable to create <%= object.class.model_name.human.downcase %>.</h5>
+      <div class="flex flex-col text-sm">
+        <p class="mbe-2"><%= pluralize(object.errors.count, "error") %> prohibited this from being saved:</p>
+        <ul class="mis-3" style="list-style: disc">
+          <% object.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>

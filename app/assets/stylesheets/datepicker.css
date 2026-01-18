@@ -5,7 +5,7 @@
   --container-size: 220px;
   --day-size: var(--size-8);
 
-  background: var(--color-surface);
+  background: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--rounded-md);
   box-shadow: var(--shadow-md);
@@ -23,8 +23,8 @@
 
   .dayContainer {
     inline-size: var(--container-size);
-    max-inline-size: var(--container-size);
     min-inline-size: var(--container-size);
+    max-inline-size: var(--container-size);
   }
 
   .dayContainer + .dayContainer {
@@ -130,8 +130,8 @@
   }
 
   .flatpickr-day {
-    border-color: transparent !important;
     border-radius: var(--rounded-md);
+    border-color: transparent !important;
     box-shadow: none !important;
     color: var(--color-text);
     height: var(--day-size);

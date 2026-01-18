@@ -1,25 +1,27 @@
 class InvitationsController < ApplicationController
-  def new
-    @user = User.new
-  end
+  before_action :authenticate!
 
   def create
-    @user = User.create_with(user_params).find_or_initialize_by(email: params[:email])
+    # Use Current.account to ensure invite comes from the active workspace
+    @invitation = Current.account.invitations.new(invitation_params)
 
-    if @user.save
-      send_invitation_instructions
-      redirect_to new_invitation_path, notice: "An invitation email has been sent to #{@user.email}"
+    if @invitation.save
+      InvitationMailer.with(invitation: @invitation).invite.deliver_later
+      redirect_to members_path, notice: "Invitation sent."
     else
-      render :new, status: :unprocessable_entity
+      redirect_to members_path, alert: "Could not send invite: #{@invitation.errors.full_messages.to_sentence}"
     end
+  end
+
+  def destroy
+    @invitation = Current.account.invitations.find_by_public_id!(params[:id])
+    @invitation.destroy
+    redirect_to members_path, notice: "Invitation revoked."
   end
 
   private
-    def user_params
-      params.permit(:email).merge(password: SecureRandom.base58, verified: true)
-    end
 
-    def send_invitation_instructions
-      UserMailer.with(user: @user).invitation_instructions.deliver_later
-    end
+  def invitation_params
+    params.require(:invitation).permit(:email, :role)
+  end
 end

@@ -1,0 +1,48 @@
+<div class="max-w-md mx-auto mt-10">
+  <h1 class="text-2xl font-bold">Join <%= @invitation.account.name %></h1>
+  <p class="mb-4 text-gray-600">You've been invited by the team.</p>
+
+  <% if user_signed_in? %>
+     <!-- This handles the case where they are logged in but emails didn't match perfectly, 
+          or you want explicit confirmation -->
+     <%= button_to "Join Team", invitation_acceptance_path(token: @invitation.token), method: :put, class: "btn-primary" %>
+  <% else %>
+  
+    <!-- Registration Form for New Users -->
+    <%= form_with model: @user, url: invitation_acceptance_path(token: @invitation.token), method: :put do |f| %>
+      <% if @user.errors.any? %>
+        <div class="text-red-500 mb-4">
+          <%= @user.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+
+      <!-- Email is read-only because the invite is specifically for this email -->
+      <div class="mb-4">
+        <label class="block text-sm font-bold">Email</label>
+        <input type="text" value="<%= @invitation.email %>" disabled class="input bg-gray-100 cursor-not-allowed w-full">
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :first_name, class: "block text-sm font-bold" %>
+        <%= f.text_field :first_name, required: true, class: "input w-full" %>
+      </div>
+      
+      <div class="mb-4">
+        <%= f.label :last_name, class: "block text-sm font-bold" %>
+        <%= f.text_field :last_name, required: true, class: "input w-full" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :password, class: "block text-sm font-bold" %>
+        <%= f.password_field :password, required: true, class: "input w-full" %>
+      </div>
+
+      <%= f.submit "Create Account & Join", class: "btn-primary w-full" %>
+    <% end %>
+
+    <div class="mt-4 text-sm text-center">
+      Already have an account? 
+      <%= link_to "Log in", sign_in_path(return_to: request.fullpath), class: "text-blue-600" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,14 @@
+<p>Hello,</p>
+
+<p>
+  You have been invited to join the workspace <strong><%= @account.name %></strong> 
+  on ChopClips.
+</p>
+
+<p>
+  <!-- This links to the new Acceptance Controller -->
+  <%= link_to "Accept Invitation", 
+      new_invitation_acceptance_url(token: @invitation.token) %>
+</p>
+
+<p>This link will expire in 48 hours.</p>

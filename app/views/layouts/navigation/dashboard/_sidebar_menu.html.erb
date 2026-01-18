@@ -4,6 +4,17 @@
     <h3 class="text-xl">ChopClips</h3>
   <% end %>
 
+  <%= link_to "#", class: "btn sidebar-menu__button" do %>
+    <div class="flex flex-item-no-shrink overflow-hidden rounded-lg bg-black text-reversed">
+      <span class="icon icon--gallery-vertical-end m-2"></span>
+    </div>
+    <div class="flex flex-col text-start leading-tight overflow-hidden">
+      <span class="overflow-ellipsis font-semibold"></span>
+      <span class="overflow-ellipsis text-xs">Enterprise</span>
+    </div>
+    <span class="icon icon--chevrons-up-down mis-auto" aria-hidden="true"></span>
+  <% end %>
+
   <div class="sidebar-menu__content mbs-4">
     <div class="sidebar-menu__group">
       <div class="sidebar-menu__items">  

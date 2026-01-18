@@ -3,12 +3,12 @@ Rails.application.routes.draw do
   post "sign_in", to: "sessions#create"
   get  "sign_up", to: "registrations#new"
   post "sign_up", to: "registrations#create"
-  resources :sessions, only: [:index, :show, :destroy]
-  resource  :password, only: [:edit, :update]
+  resources :sessions, only: [ :index, :show, :destroy ]
+  resource  :password, only: [ :edit, :update ]
   namespace :identity do
-    resource :email,              only: [:edit, :update]
-    resource :email_verification, only: [:show, :create]
-    resource :password_reset,     only: [:new, :edit, :create, :update]
+    resource :email,              only: [ :edit, :update ]
+    resource :email_verification, only: [ :show, :create ]
+    resource :password_reset,     only: [ :new, :edit, :create, :update ]
   end
   namespace :authentications do
     resources :events, only: :index
@@ -17,10 +17,10 @@ Rails.application.routes.draw do
   get  "/auth/:provider/callback", to: "sessions/omniauth#create"
   post "/auth/:provider/callback", to: "sessions/omniauth#create"
   post "users/:user_id/masquerade", to: "masquerades#create", as: :user_masquerade
-  resource :invitation, only: [:new, :create]
+  resource :invitation, only: [ :new, :create ]
   namespace :sessions do
-    resource :passwordless, only: [:new, :edit, :create]
-    resource :sudo, only: [:new, :create]
+    resource :passwordless, only: [ :new, :edit, :create ]
+    resource :sudo, only: [ :new, :create ]
   end
   root "home#index"
   get "static_pages/pricing"
@@ -38,6 +38,18 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+
+  # 1. For Admins: Sending invites from the dashboard
+  resources :invitations, only: [ :create, :destroy ]
+
+  # 2. For Recipients: Clicking the email link
+  # Using a singular resource because you accept ONE specific invite
+  resource :invitation_acceptance, only: [ :show, :update ]
+
+  # Account switcher
+  post "accounts/:id/switch", to: "accounts#switch", as: :switch_account
+
+  # root "projects#index"
 
   # Defines the root path route ("/")
   # root "posts#index"

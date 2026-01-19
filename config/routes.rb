@@ -46,6 +46,8 @@ Rails.application.routes.draw do
   # Using a singular resource because you accept ONE specific invite
   resource :invitation_acceptance, only: [ :show, :update ]
 
+  resources :accounts
+
   # Account switcher
   post "accounts/:id/switch", to: "accounts#switch", as: :switch_account
 

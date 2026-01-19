@@ -4,41 +4,103 @@
     <h3 class="text-xl">ChopClips</h3>
   <% end %>
 
-  <%= link_to "#", class: "btn sidebar-menu__button" do %>
-    <div class="flex flex-item-no-shrink overflow-hidden rounded-lg bg-black text-reversed">
-      <span class="icon icon--gallery-vertical-end m-2"></span>
-    </div>
-    <div class="flex flex-col text-start leading-tight overflow-hidden">
-      <span class="overflow-ellipsis font-semibold"></span>
-      <span class="overflow-ellipsis text-xs">Enterprise</span>
-    </div>
-    <span class="icon icon--chevrons-up-down mis-auto" aria-hidden="true"></span>
-  <% end %>
+  <%# --- WORKSPACE SWITCHER --- %>
+  <div contents 
+       class="mbe-4"
+       data-controller="popover" 
+       data-popover-placement-value="bottom-start" 
+       data-action="click@window->popover#clickOutside">
+    
+    <%= button_tag type: "button", 
+                   class: "btn sidebar-menu__button workspace-button i-full", 
+                   data: { action: "click->popover#toggle", popover_target: "trigger" }, 
+                   aria: { haspopup: "true" } do %>
+      
+      <%# Visual: Rounded Square for Team (vs Circle for User) %>
+      <div class="flex flex-item-no-shrink overflow-hidden rounded-md bg-green-600">
+        <div class="flex items-center justify-center font-bold text-sm" style="width: 36px; height: 36px;">
+          <%= account_initials(Current.account) %> 
+        </div>
+      </div>
 
-  <div class="sidebar-menu__content mbs-4">
+      <div class="flex flex-col text-start leading-tight overflow-hidden mis-2">
+        <span class="overflow-ellipsis font-semibold"><%= Current.account.name %></span>
+        <span class="overflow-ellipsis text-xs text-gray-500 capitalize">
+          <%= current_role %>
+        </span>
+      </div>
+      
+      <span class="icon icon--chevrons-up-down mis-auto text-gray-400" aria-hidden="true"></span>
+    <% end %>
+
+    <%# Popover Content %>
+    <%= tag.div popover: true, id: "workspace-switcher-popover", class: "popover", style: "--popover-size: 16rem;", data: { popover_target: "content" } do %>
+      <div class="p-2 text-xs font-semibold text-gray-500 uppercase i-full">
+        Switch Workspace
+      </div>
+      
+      <div class="menu i-full" role="menu">
+        <% Current.user.accounts.each do |account| %>
+          <% is_active = account == Current.account %>
+          
+          <%# Triggers the 'switch' action in AccountsController %>
+          <%= button_to switch_account_path(account), method: :post, class: "i-full btn menu__item justify-between #{'bg-green-600' if is_active}", role: "menuitem", disabled: is_active do %>
+            <div class="flex items-center gap-2">
+              <div class="i-full p-1 rounded-md bg-black text-reversed flex items-center justify-center text-xs font-bold">
+                <%= account_initials(account) %>
+              </div>
+              <span class="<%= 'font-semibold' if is_active %>"><%= account.name %></span>
+            </div>
+            <% if is_active %>
+              <span class="icon icon--check text-primary" aria-hidden="true"></span>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <hr class="menu__separator my-1" role="separator"/>
+        
+        <%= link_to new_account_path, class: "btn menu__item" do %>
+          <span class="icon icon--plus" aria-hidden="true"></span>
+          Create Workspace
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# --- NAVIGATION --- %>
+  <div class="sidebar-menu__content">
     <div class="sidebar-menu__group">
       <div class="sidebar-menu__items">  
         <nav>
 
-          <%= link_to "", 
+          <%# 1. Projects (Home) %>
+          <%= link_to root_path, 
                       class: "btn sidebar-menu__button mbe-1", 
-                      aria: (current_page?("") ? { current: "page" } : {}) do %>
-            <span class="icon icon--audio-lines" aria-hidden="true"></span>
-            Dashboard
-          <% end %>
-          
-          <%= link_to "", 
-                      class: "btn sidebar-menu__button mbe-1", 
-                      aria: (current_page?("") ? { current: "page" } : {}) do %>
-            <span class="icon icon--vc" aria-hidden="true"></span>
+                      aria: (current_page?(root_path) ? { current: "page" } : {}) do %>
+            <span class="icon icon--gallery-vertical-end" aria-hidden="true"></span>
             Projects
           <% end %>
           
-          <%= link_to "", 
-                      class: "btn sidebar-menu__button mbe-1", 
-                      aria: (current_page?("") ? { current: "page" } : {}) do %>
-            <span class="icon icon--rotate-3d" aria-hidden="true"></span>
-            Prompt Library
+          <%# 2. Brand Kits (Crucial for B2B/Enterprise value) %>
+          <%= link_to "#", 
+                      class: "btn sidebar-menu__button mbe-1" do %>
+            <span class="icon icon--palette" aria-hidden="true"></span>
+            Brand Kits
+          <% end %>
+          
+          <%# 3. Templates (For speed) %>
+          <%= link_to "#", 
+                      class: "btn sidebar-menu__button mbe-1" do %>
+            <span class="icon icon--form" aria-hidden="true"></span>
+            Templates
+          <% end %>
+
+          <%# 4. Team Management (Growth feature) %>
+          <%= link_to invitations_path, 
+                      class: "btn sidebar-menu__button mbe-1",
+                      aria: (current_page?(invitations_path) ? { current: "page" } : {}) do %>
+            <span class="icon icon--users" aria-hidden="true"></span>
+            Team Members
           <% end %>
 
         </nav>
@@ -46,9 +108,11 @@
     </div>
   </div>
 
-  <%# Theme switcher popover %>
+  <%# --- FOOTER ITEMS (Theme, Notifications, Profile) --- %>
+  <%# ... Your existing footer code matches perfectly here ... %>
   <div class="mbs-auto flex flex-col">
-    <div contents 
+    <%# Keep your existing Theme/Notification/Profile code here %>
+     <div contents 
          data-controller="popover" 
          data-popover-placement-value="right-center" 
          data-action="click@window->popover#clickOutside">
@@ -147,6 +211,6 @@
 
     <div class="hide@md">
       <%= render "layouts/shared/credits_card" %>
-    </div>    
+    </div>
   </div>
 </div>

@@ -49,6 +49,10 @@ img.icon {
 .icon--circle-plus { --svg: url("circle-plus.svg"); }
 .icon--calendar { --svg: url("calendar.svg"); }
 .icon--car { --svg: url("car.svg"); }
+.icon--plus { --svg: url("plus.svg"); }
+.icon--form { --svg: url("form.svg"); }
+.icon--vertical-gallery-end { --svg: url("vertical-gallery-end.svg"); }
+.icon--palette { --svg: url("palette.svg"); }
 .icon--move-right { --svg: url("move-right.svg"); }
 .icon--upload { --svg: url("upload.svg"); }
 .icon--file-up { --svg: url("file-up.svg"); }

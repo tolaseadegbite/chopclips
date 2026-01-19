@@ -1,14 +1,32 @@
-<p style="color: red"><%= alert %></p>
-
-<h1>Sign in without password</h1>
-
-<%= form_with(url: sessions_passwordless_path) do |form| %>
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.email_field :email, required: true, autofocus: true %>
+<div class="p-4 i-full bg-main" style="max-inline-size: 25rem;">
+  <div class="text-center">
+    <div class="mbe-5">
+      <%= link_to root_path, class: "inline-block" do %>
+        <%= image_tag("logo.png", size: 80) %>
+      <% end %>
+    </div>
+    <h1 class="font-semibold text-2xl mbe-5">Sign in to 2yarn without password</h1>
   </div>
 
-  <div>
-    <%= form.submit "Sign in" %>
+  <%= form_with(url: sessions_passwordless_path) do |form| %>
+    <div class="mbe-5">
+      <%= form.label :email, style: "display: block", class: "font-semibold mbe-2" %>
+      <%= form.email_field :email, required: true, autofocus: true, class: "input" %>
+    </div>
+
+    <div>
+      <%= form.submit "Sign in", class: "btn btn--primary i-full" %>
+    </div>
+  <% end %>
+
+  <div class="text-sm text-center">
+    <%#= button_to "Sign in with OmniAuth", "/auth/developer", "data-turbo" => false %>
   </div>
-<% end %>
+
+  <br>
+
+  <div class="text-sm text-center">
+    <%= link_to "Sign up", sign_up_path %> |
+    <%= link_to "Forgot your password?", new_identity_password_reset_path %>
+  </div>
+</div>

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resource  :password, only: [ :edit, :update ]
   namespace :identity do
     resource :email,              only: [ :edit, :update ]
+    resource :name,               only: [ :edit, :update ]
     resource :email_verification, only: [ :show, :create ]
     resource :password_reset,     only: [ :new, :edit, :create, :update ]
   end
@@ -55,4 +56,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  resource :dashboard, only: [ :show ]
+  get "/settings", to: "home#index"
 end

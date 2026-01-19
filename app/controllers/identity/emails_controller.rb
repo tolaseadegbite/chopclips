@@ -1,14 +1,27 @@
-class Identity::EmailsController < ApplicationController
+class Identity::EmailsController < DashboardsController
   before_action :set_user
 
   def edit
   end
 
   def update
-    if @user.update(user_params)
-      redirect_to_root
-    else
-      render :edit, status: :unprocessable_entity
+    respond_to do |format|
+      if @user.update(user_params)
+
+        if @user.email_previously_changed?
+          resend_email_verification
+        end
+
+        flash.now[:notice] = "Email was successfully updated."
+        format.turbo_stream
+        # redirect_to root_path, notice: "Your password has been changed"
+      else
+        flash.now[:alert] = @user.errors.full_messages.to_sentence
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.update("flash_messages", partial: "layouts/shared/flash"),
+                 status: :unprocessable_entity
+        end
+      end
     end
   end
 

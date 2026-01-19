@@ -1,33 +1,24 @@
-<h1>Activity Log</h1>
+<%= turbo_frame_tag "settings_content" do %>
+  <div class="p-4">
 
-<div id="sessions">
-  <% @events.each do |event| %>
-    <div id="<%= dom_id event %>">
-      <p>
-        <strong>User Agent:</strong>
-        <%= event.user_agent %>
-      </p>
+    <%# --- MOBILE-ONLY BACK BUTTON --- %>
+    <%= render "shared/settings_back_button" %>
 
-      <p>
-        <strong>Action:</strong>
-        <%= event.action %>
-      </p>
+    <div class="max-i-full">
+      <h1 class="font-bold text-2xl mbe-4">Activity Log</h1>
+      <p class="text-subtle mbe-6">A log of important security-related events that have occurred on your account.</p>
 
-      <p>
-        <strong>Ip Address:</strong>
-        <%= event.ip_address %>
-      </p>
-
-      <p>
-        <strong>Created at:</strong>
-        <%= event.created_at %>
-      </p>
+      <div id="events" class="flex flex-col gap">
+        <% @events.each do |event| %>
+          <div id="<%= dom_id event %>" class="flex items-center justify-between p-4 rounded-lg bg-surface border border-main">
+            <div class="flex flex-col gap-half">
+              <p class="font-medium capitalize"><%= event.action.gsub("_", " ") %></p>
+              <p class="text-sm text-subtle"><%= event.user_agent %></p>
+              <p class="text-xs text-subtle"><%= event.created_at.strftime("%b %d, %Y %I:%M %p") %> from <%= event.ip_address %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
-  <% end %>
-</div>
-
-<br>
-
-<div>
-  <%= link_to "Back", root_path %>
-</div>
+  </div>
+<% end %>

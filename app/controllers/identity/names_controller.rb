@@ -1,4 +1,4 @@
-class PasswordsController < DashboardsController
+class Identity::NamesController < DashboardsController
   before_action :set_user
 
   def edit
@@ -7,7 +7,8 @@ class PasswordsController < DashboardsController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        flash.now[:notice] = "Password was successfully updated."
+
+        flash.now[:notice] = "Name was successfully updated."
         format.turbo_stream
         # redirect_to root_path, notice: "Your password has been changed"
       else
@@ -26,6 +27,6 @@ class PasswordsController < DashboardsController
     end
 
     def user_params
-      params.permit(:password, :password_confirmation, :password_challenge).with_defaults(password_challenge: "")
+      params.permit(:name)
     end
 end

@@ -27,6 +27,6 @@ class Identity::NamesController < DashboardsController
     end
 
     def user_params
-      params.permit(:name)
+      params.permit(:first_name, :last_name)
     end
 end

@@ -4,6 +4,8 @@ class Invitation < ApplicationRecord
 
   has_secure_token :token
 
+  before_create :set_expiration
+
   belongs_to :account
 
   # Secure token for the email link (separate from public_id)
@@ -18,6 +20,11 @@ class Invitation < ApplicationRecord
   validate :email_not_already_member
 
   private
+
+  def set_expiration
+    # Default to 48 hours from creation
+    self.expires_at = 2.days.from_now
+  end
 
   def email_not_already_member
     if account.users.exists?(email: email)

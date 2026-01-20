@@ -12,4 +12,11 @@ class Account < ApplicationRecord
   has_many :clips, dependent: :destroy
 
   validates :name, presence: true
+
+  def personal?
+    # Simple logic: If it's the user's oldest account and they are the only member
+    # Or explicit logic if you added a `personal: boolean` column.
+    # For now, simplest is:
+    memberships.count == 1 && memberships.first.admin?
+  end
 end

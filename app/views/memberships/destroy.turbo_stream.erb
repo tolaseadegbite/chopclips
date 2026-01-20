@@ -1,0 +1,2 @@
+<%= turbo_stream.remove dom_id(@membership) %>
+<%= turbo_stream.update "trigger_active", "Active Members (#{Current.account.memberships.count})" %>

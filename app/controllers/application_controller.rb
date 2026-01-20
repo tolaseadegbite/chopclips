@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_request_details
   before_action :set_current_user_from_session
   before_action :set_current_account
-  before_action :authenticate
+  before_action :authenticate!
 
   private
 
@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
     Current.account ||= current_user.accounts.order(created_at: :asc).first
   end
 
-  def authenticate
+  def authenticate!
     unless user_signed_in?
       redirect_to sign_in_path, alert: "You must be signed in to access this page."
     end

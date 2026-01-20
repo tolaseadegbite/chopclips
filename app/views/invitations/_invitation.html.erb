@@ -1,0 +1,23 @@
+<tr id="<%= dom_id(invitation) %>" class="border-b last:border-0 hover:bg-highlight transition">
+  <td class="p-3 font-medium text-primary">
+    <%= invitation.email %>
+  </td>
+  
+  <td class="p-3">
+    <span class="bg-shade text-subtle pi-2 pb-1 rounded-full text-xs font-medium capitalize">
+      <%= invitation.role %> (Pending)
+    </span>
+  </td>
+
+  <td class="p-3 text-sm text-subtle">
+    <%= time_ago_in_words(invitation.created_at) %> ago
+  </td>
+
+  <td class="p-3 text-end">
+    <% if current_role == "Admin" %>
+      <%= button_to invitation_path(invitation), method: :delete, class: "btn text-xs text-negative hover:underline", form: { data: { turbo_confirm: "Revoke this invitation?" } } do %>
+        Revoke
+      <% end %>
+    <% end %>
+  </td>
+</tr>

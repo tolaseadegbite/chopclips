@@ -4,26 +4,34 @@ class InvitationAcceptancesController < ApplicationController
 
   def show
     if user_signed_in?
-      if Current.user.email.downcase == @invitation.email.downcase
-        accept_invitation(Current.user)
-      else
-        # Render a view saying "You are logged in as X, but invite is for Y"
+      # Security Check: Ensure the logged-in user matches the invite
+      unless Current.user.email.downcase == @invitation.email.downcase
+        # Log out the wrong user so the correct person can sign in
+        # Or render a specific error page
         render :wrong_user
       end
+      # If emails match, we just fall through to render 'show.html.erb'
+      # This lets the user see the "Join Team" button.
     else
       @user = User.new(email: @invitation.email)
     end
   end
 
   def update
-    @user = User.new(user_params)
-    @user.email = @invitation.email
-    @user.verified = true
-
-    if @user.save
-      accept_invitation(@user)
+    if user_signed_in?
+      # Scenario A: Logged In User clicked "Join Team"
+      accept_invitation(Current.user)
     else
-      render :show, status: :unprocessable_entity
+      # Scenario B: New User filled out the Registration Form
+      @user = User.new(user_params)
+      @user.email = @invitation.email
+      @user.verified = true
+
+      if @user.save
+        accept_invitation(@user)
+      else
+        render :show, status: :unprocessable_entity
+      end
     end
   end
 
@@ -36,7 +44,6 @@ class InvitationAcceptancesController < ApplicationController
 
   def accept_invitation(user)
     ActiveRecord::Base.transaction do
-      # THIS IS THE KEY CHANGE: Create Membership, don't update User
       Membership.create!(
         user: user,
         account: @invitation.account,
@@ -45,11 +52,11 @@ class InvitationAcceptancesController < ApplicationController
       @invitation.destroy!
     end
 
-    # Log in and switch context to the new team
+    # Ensure session is set correctly
     session[:user_id] = user.id
     session[:current_account_id] = @invitation.account.id
 
-    redirect_to root_path, notice: "Joined #{@invitation.account.name}!"
+    redirect_to root_path, notice: "You have joined #{@invitation.account.name}!"
   end
 
   def user_params

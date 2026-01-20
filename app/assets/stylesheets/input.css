@@ -50,7 +50,7 @@
   }
 
   &:focus-within {
-    outline: var(--input-outline-size, 2px) solid var(--color-selected-dark);
+    outline: var(--input-outline-size, 2px) solid var(--color-positive);
   }
 }
 
@@ -61,7 +61,7 @@
 
 :is(.input, .checkbox, .radio) {
   &:focus-visible {
-    outline: var(--input-outline-size, 2px) solid var(--color-selected-dark);
+    outline: var(--input-outline-size, 2px) solid var(--color-positive);
   }
 
   .field_with_errors & {

@@ -1,0 +1,2 @@
+<%= turbo_stream.remove dom_id(@invitation) %>
+<%= turbo_stream.update "trigger_pending", "Pending Invites (#{Current.account.invitations.count})" %>

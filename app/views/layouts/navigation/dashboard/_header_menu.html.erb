@@ -56,7 +56,7 @@
       <div class="menu" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
         
         <span class="inline-flex items-center gap-2 overflow-ellipsis max-i-full font-semibold">
-          <span><%= current_user.name %></span>
+          <span><%= current_user.full_name %></span>
           
           <% if current_user.verified? %>
             <span class="text-positive" title="Verified Account">

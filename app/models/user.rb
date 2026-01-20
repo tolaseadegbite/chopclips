@@ -21,7 +21,7 @@ class User < ApplicationRecord
   has_many :sign_in_tokens, dependent: :destroy
   has_many :events, dependent: :destroy
 
-  # Note: Projects/Clips still belong to user for "Created By" history, 
+  # Note: Projects/Clips still belong to user for "Created By" history,
   # but access control is now done via Account.
   has_many :projects, dependent: :destroy
   has_many :clips, dependent: :destroy
@@ -31,12 +31,12 @@ class User < ApplicationRecord
   validates :password, allow_nil: true, length: { minimum: 12 }
   validates :password, not_pwned: { message: "might easily be guessed" }
 
-  def name
+  def full_name
     "#{first_name} #{last_name}".strip
   end
 
   def initials
-    "#{first_name.first}#{last_name.first}".upcase
+    "#{first_name&.first}#{last_name&.first}".upcase
   end
 
   normalizes :email, with: -> { _1.strip.downcase }

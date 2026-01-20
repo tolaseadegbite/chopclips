@@ -1,48 +1,60 @@
-<div class="max-w-md mx-auto mt-10">
+<div class="mbs-10 mi-auto p-4" style="max-inline-size: 450px;">
   <h1 class="text-2xl font-bold">Join <%= @invitation.account.name %></h1>
-  <p class="mb-4 text-gray-600">You've been invited by the team.</p>
+  <p class="mbe-6 text-subtle">You've been invited by the team.</p>
 
   <% if user_signed_in? %>
-     <!-- This handles the case where they are logged in but emails didn't match perfectly, 
-          or you want explicit confirmation -->
-     <%= button_to "Join Team", invitation_acceptance_path(token: @invitation.token), method: :put, class: "btn-primary" %>
+     <!-- Scenario A: Logged In User -->
+     <div class="flex flex-col gap-4">
+       <div class="p-4 bg-surface border rounded-md flex items-center gap-3">
+         <div class="flex flex-item-no-shrink overflow-hidden rounded-full bg-black text-reversed items-center justify-center font-bold text-xs" style="inline-size: 2rem; block-size: 2rem;">
+            <%= Current.user.initials %>
+         </div>
+         <div class="flex flex-col">
+           <span class="font-semibold text-sm">Signed in as <%= Current.user.email %></span>
+           <%= link_to "Not you?", session_path(Current.session), data: { turbo_method: :delete }, class: "text-emerald-600 hover:text-green-700 text-sm" %>
+         </div>
+       </div>
+
+       <%= button_to "Join Team", invitation_acceptance_path(token: @invitation.token), method: :put, class: "btn bg-emerald-900 border-0 text-gray-50 hover:bg-green-700 i-full" %>
+     </div>
+
   <% else %>
   
-    <!-- Registration Form for New Users -->
+    <!-- Scenario B: New User Registration -->
     <%= form_with model: @user, url: invitation_acceptance_path(token: @invitation.token), method: :put do |f| %>
       <% if @user.errors.any? %>
-        <div class="text-red-500 mb-4">
+        <div class="text-negative mbe-4 text-sm">
           <%= @user.errors.full_messages.to_sentence %>
         </div>
       <% end %>
 
-      <!-- Email is read-only because the invite is specifically for this email -->
-      <div class="mb-4">
-        <label class="block text-sm font-bold">Email</label>
-        <input type="text" value="<%= @invitation.email %>" disabled class="input bg-gray-100 cursor-not-allowed w-full">
+      <!-- Email is read-only -->
+      <div class="flex flex-col gap-half mbe-4">
+        <label class="text-sm font-bold">Email</label>
+        <input type="text" value="<%= @invitation.email %>" disabled class="input bg-shade i-full text-subtle" style="cursor: not-allowed;">
       </div>
 
-      <div class="mb-4">
-        <%= f.label :first_name, class: "block text-sm font-bold" %>
-        <%= f.text_field :first_name, required: true, class: "input w-full" %>
+      <div class="flex flex-col gap-half mbe-4">
+        <%= f.label :first_name, class: "text-sm font-bold" %>
+        <%= f.text_field :first_name, required: true, class: "input i-full" %>
       </div>
       
-      <div class="mb-4">
-        <%= f.label :last_name, class: "block text-sm font-bold" %>
-        <%= f.text_field :last_name, required: true, class: "input w-full" %>
+      <div class="flex flex-col gap-half mbe-4">
+        <%= f.label :last_name, class: "text-sm font-bold" %>
+        <%= f.text_field :last_name, required: true, class: "input i-full" %>
       </div>
 
-      <div class="mb-4">
-        <%= f.label :password, class: "block text-sm font-bold" %>
-        <%= f.password_field :password, required: true, class: "input w-full" %>
+      <div class="flex flex-col gap-half mbe-6">
+        <%= f.label :password, class: "text-sm font-bold" %>
+        <%= f.password_field :password, required: true, class: "input i-full" %>
       </div>
 
-      <%= f.submit "Create Account & Join", class: "btn-primary w-full" %>
+      <%= f.submit "Create Account & Join", class: "btn bg-emerald-900 border-0 text-gray-50 hover:bg-green-700 i-full" %>
     <% end %>
 
-    <div class="mt-4 text-sm text-center">
+    <div class="mbs-4 text-sm text-center">
       Already have an account? 
-      <%= link_to "Log in", sign_in_path(return_to: request.fullpath), class: "text-blue-600" %>
+      <%= link_to "Log in", sign_in_path(return_to: request.fullpath), class: "text-emerald-600 hover:text-green-700" %>
     </div>
   <% end %>
 </div>

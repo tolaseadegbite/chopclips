@@ -1,0 +1,71 @@
+<% content_for :title, "Workspace Settings" %>
+
+<div class="container i-full p-4 mi-auto">
+  
+  <div class="mbe-8">
+    <h1 class="text-2xl font-bold mbe-2">General Settings</h1>
+    <p class="text-subtle">Manage your workspace identity.</p>
+  </div>
+
+  <%# --- RENAME CARD --- %>
+  <div class="border rounded-lg bg-surface mbe-10 overflow-hidden">
+    <div class="p-6">
+      <h3 class="font-bold text-lg mbe-1">Workspace Name</h3>
+      <p class="text-sm text-subtle">This name is visible to all team members.</p>
+    </div>
+
+    <div class="p-6">
+      <%= form_with(model: @account, url: account_path(@account), method: :patch) do |form| %>
+        <% if @account.errors.any? %>
+          <div class="text-negative text-sm mbe-4">
+            <%= @account.errors.full_messages.to_sentence %>
+          </div>
+        <% end %>
+
+        <div class="flex flex-col gap-1 mbe-6">
+          <%= form.label :name, "Display Name", class: "text-sm font-medium" %>
+          <%= form.text_field :name, required: true, class: "input" %>
+        </div>
+
+        <div class="flex items-center justify-end">
+          <%= form.submit "Save Changes", class: "btn bg-emerald-900 border-0 text-gray-50 hover:bg-green-700" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# --- DANGER ZONE --- %>
+  <div class="border rounded-lg bg-surface overflow-hidden" style="border-color: var(--color-negative);">
+    <div class="p-6" style="border-color: var(--color-negative);">
+      <h3 class="font-bold text-lg text-negative mbe-1">Danger Zone</h3>
+      <p class="text-sm text-subtle">Irreversible actions for this workspace.</p>
+    </div>
+
+    <div class="p-6 flex items-center justify-between gap-4 flex-wrap">
+      <div class="flex flex-col">
+        <span class="font-bold text-sm">Delete Workspace</span>
+        <span class="text-xs text-subtle">Permanently remove this workspace and all associated data.</span>
+      </div>
+
+      <% delete_trigger = button_tag "Delete Workspace", type: "button", class: "btn text-gray-50 border-0 font-bold bg-red-600 hover:bg-red-800", data: { action: "dialog#showModal" } %>
+      
+      <%= modal_dialog delete_trigger, size: "450px", title: "Delete #{@account.name}?" do %>
+        <p class="text-sm text-subtle mbe-6">
+          Are you sure you want to delete <strong><%= @account.name %></strong>? 
+          <br><br>
+          All projects, clips, and team memberships will be permanently destroyed. 
+          This action <strong>cannot</strong> be undone.
+        </p>
+        
+        <div class="flex items-center justify-end gap-2">
+          <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+          
+          <%= button_to account_path(@account), method: :delete, class: "btn text-gray-50 border-0 font-bold bg-red-600 hover:bg-red-800" do %>
+            I understand, delete it
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+</div>

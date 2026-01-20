@@ -1,22 +1,32 @@
 class InvitationsController < ApplicationController
   before_action :authenticate!
 
+  def new
+    @invitation = Invitation.new
+  end
+
   def create
-    # Use Current.account to ensure invite comes from the active workspace
     @invitation = Current.account.invitations.new(invitation_params)
 
     if @invitation.save
       InvitationMailer.with(invitation: @invitation).invite.deliver_later
-      redirect_to members_path, notice: "Invitation sent."
+      respond_to do |format|
+        format.html { redirect_to members_path, notice: "Invitation sent." }
+        format.turbo_stream
+      end
     else
-      redirect_to members_path, alert: "Could not send invite: #{@invitation.errors.full_messages.to_sentence}"
+      render :new, status: :unprocessable_entity
     end
   end
 
   def destroy
     @invitation = Current.account.invitations.find_by_public_id!(params[:id])
     @invitation.destroy
-    redirect_to members_path, notice: "Invitation revoked."
+
+    respond_to do |format|
+      format.html { redirect_to members_path, notice: "Invitation revoked." }
+      format.turbo_stream
+    end
   end
 
   private

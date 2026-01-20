@@ -108,6 +108,7 @@ img.icon {
 .icon--pause-circle { --svg: url("pause-circle.svg"); }
 .icon--history { --svg: url("history.svg"); }
 .icon--vc { --svg: url("vc.svg"); }
+.icon--trash-2 { --svg: url("trash-2.svg"); }
 .icon--bell { --svg: url("bell.svg"); }
 .icon--rotate-3d { --svg: url("rotate-3d.svg"); }
 .icon--voices { --svg: url("voices.svg"); }

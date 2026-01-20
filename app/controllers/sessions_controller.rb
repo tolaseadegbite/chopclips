@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_action :authenticate, only: %i[ new create ]
+  skip_before_action :authenticate!, only: %i[ new create ]
 
   before_action :set_session, only: :destroy
 
@@ -15,7 +15,8 @@ class SessionsController < ApplicationController
       @session = user.sessions.create!
       cookies.signed.permanent[:session_token] = { value: @session.id, httponly: true }
 
-      redirect_to root_path, notice: "Signed in successfully"
+      # UPDATED: Check for return_to, otherwise default to root
+      redirect_to params[:return_to].presence || root_path, notice: "Signed in successfully"
     else
       redirect_to sign_in_path(email_hint: params[:email]), alert: "That email or password is incorrect"
     end

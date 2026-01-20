@@ -59,7 +59,7 @@
 
         <hr class="menu__separator my-1" role="separator"/>
         
-        <%= link_to new_account_path, class: "btn menu__item" do %>
+        <%= link_to new_account_path, class: "btn menu__item", data: { turbo_frame: "modal" } do %>
           <span class="icon icon--plus" aria-hidden="true"></span>
           Create Workspace
         <% end %>
@@ -69,41 +69,68 @@
 
   <%# --- NAVIGATION --- %>
   <div class="sidebar-menu__content">
+    <%# --- GROUP 1: PLATFORM --- %>
     <div class="sidebar-menu__group">
-      <div class="sidebar-menu__items">  
-        <nav>
-
-          <%# 1. Projects (Home) %>
-          <%= link_to root_path, 
-                      class: "btn sidebar-menu__button mbe-1", 
-                      aria: (current_page?(root_path) ? { current: "page" } : {}) do %>
+      <div class="sidebar-menu__group-label">Platform</div>
+      <div class="sidebar-menu__items">
+        <%# Open if we are on root (projects) or other platform links %>
+        <details <%= 'open' if current_page?(root_path) ? 'open' : '' %>>
+          <summary class="btn sidebar-menu__button">
             <span class="icon icon--gallery-vertical-end" aria-hidden="true"></span>
-            Projects
-          <% end %>
-          
-          <%# 2. Brand Kits (Crucial for B2B/Enterprise value) %>
-          <%= link_to "#", 
-                      class: "btn sidebar-menu__button mbe-1" do %>
-            <span class="icon icon--palette" aria-hidden="true"></span>
-            Brand Kits
-          <% end %>
-          
-          <%# 3. Templates (For speed) %>
-          <%= link_to "#", 
-                      class: "btn sidebar-menu__button mbe-1" do %>
-            <span class="icon icon--form" aria-hidden="true"></span>
-            Templates
-          <% end %>
+            <span class="overflow-ellipsis">Studio</span>
+          </summary>
+          <nav class="sidebar-menu__sub">
+            <%= link_to "Projects", root_path, 
+                  class: "btn sidebar-menu__button", 
+                  aria: (current_page?(root_path) ? { current: "page" } : {}) %>
+            
+            <%= link_to "Brand Kits", "#", 
+                  class: "btn sidebar-menu__button" %>
+            
+            <%= link_to "Templates", "#", 
+                  class: "btn sidebar-menu__button" %>
+          </nav>
+        </details>
+      </div>
+    </div>
 
-          <%# 4. Team Management (Growth feature) %>
-          <%= link_to invitations_path, 
-                      class: "btn sidebar-menu__button mbe-1",
-                      aria: (current_page?(invitations_path) ? { current: "page" } : {}) do %>
-            <span class="icon icon--users" aria-hidden="true"></span>
-            Team Members
-          <% end %>
+    <%# --- GROUP 2: WORKSPACE SETTINGS --- %>
+    <div class="sidebar-menu__group">
+      <div class="sidebar-menu__group-label">Configuration</div>
+      <div class="sidebar-menu__items">
+        
+        <%# Check if we are on any settings/members page to keep this open %>
+        <% settings_active = request.path.include?('settings') || request.path.include?('members') %>
+        
+        <details <%= 'open' if settings_active ? 'open' : '' %>>
+          <summary class="btn sidebar-menu__button">
+            <span class="icon icon--settings" aria-hidden="true"></span>
+            <span class="overflow-ellipsis">Workspace Settings</span>
+          </summary>
+          <nav class="sidebar-menu__sub">
+            
+            <%# 1. General (Admin Only) %>
+            <% if current_role == "Admin" %>
+              <%= link_to "General", edit_account_path(Current.account), 
+                    class: "btn sidebar-menu__button",
+                    aria: (current_page?(edit_account_path(Current.account)) ? { current: "page" } : {}) %>
+            <% end %>
 
-        </nav>
+            <%# 2. Teams (Directory) %>
+            <%= link_to "Teams", members_path, 
+                  class: "btn sidebar-menu__button",
+                  aria: (current_page?(members_path) ? { current: "page" } : {}) %>
+
+            <%# 3. Billing (Admin Only - Placeholder) %>
+            <% if current_role == "Admin" %>
+              <%= link_to "Billing", "#", 
+                    class: "btn sidebar-menu__button" %>
+            <% end %>
+
+            <%= link_to "Limits", "#", 
+                  class: "btn sidebar-menu__button" %>
+          </nav>
+        </details>
       </div>
     </div>
   </div>
@@ -167,7 +194,7 @@
         <div class="flex flex-col text-start leading-tight overflow-hidden">
           
           <span class="inline-flex items-center gap-2 overflow-ellipsis max-i-full font-semibold">
-            <span><%= current_user.name %></span>
+            <span><%= current_user.full_name %></span>
             
             <% if current_user.verified? %>
               <span class="text-positive" title="Verified Account">

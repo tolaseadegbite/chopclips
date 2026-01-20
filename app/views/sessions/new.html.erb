@@ -8,7 +8,7 @@
     <h1 class="font-semibold text-2xl mbe-5">Sign in to 2yarn</h1>
   </div>
 
-  <%= form_with(url: sign_in_path) do |form| %>
+  <%= form_with(url: sign_in_path(return_to: params[:return_to])) do |form| %>
     <div class="mbe-5">
       <%= form.label :email, style: "display: block", class: "font-semibold mbe-2" %>
       <%= form.email_field :email, value: params[:email_hint], required: true, autofocus: true, autocomplete: "email", class: "input" %>
@@ -20,7 +20,7 @@
     </div>
 
     <div>
-      <%= form.submit "Sign in", class: "btn btn--primary i-full" %>
+      <%= form.submit "Sign in", class: "btn bg-emerald-900 border-0 text-gray-50 hover:bg-green-700" %>
     </div>
   <% end %>
 

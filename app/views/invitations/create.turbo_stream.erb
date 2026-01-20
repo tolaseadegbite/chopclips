@@ -1,0 +1,8 @@
+<%# 1. Append the new row to the pending list %>
+<%= turbo_stream.prepend "invitations-list", partial: "invitations/invitation", locals: { invitation: @invitation } %>
+
+<%# 2. Reset the modal form %>
+<%= turbo_stream.replace "modal", "" %>
+
+<%# 3. Update the counter (Optional polish) %>
+<%= turbo_stream.update "trigger_pending", "Pending Invites (#{Current.account.invitations.count})" %>

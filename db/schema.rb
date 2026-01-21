@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_18_094909) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_21_180748) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "accounts", force: :cascade do |t|
     t.string "name", default: "My Workspace", null: false
     t.string "public_id", null: false
+    t.integer "seat_limit", default: 5, null: false
     t.index ["public_id"], name: "index_accounts_on_public_id", unique: true
   end
 

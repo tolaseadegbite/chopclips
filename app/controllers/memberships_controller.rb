@@ -45,28 +45,54 @@ class MembershipsController < DashboardsController
 
     if @membership.user == Current.user
       # --- CASE 1: LEAVING (Self-removal) ---
-
+      
       # Safety Check: Last Admin cannot leave
       if @membership.admin? && Current.account.memberships.admin.count == 1
-        redirect_to members_path, alert: "You cannot leave because you are the only Admin."
+        redirect_to members_path, alert: "You cannot leave because you are the only Admin. Delete the workspace instead."
         return
       end
 
+      # 1. Capture data before destroy so we can use it for emails
+      user_who_left = @membership.user
+      account_context = @membership.account
+      
+      # 2. Find remaining Admins to notify (excluding the person leaving)
+      admins_to_notify = account_context.memberships.admin
+                                        .includes(:user)
+                                        .where.not(user_id: user_who_left.id)
+                                        .map(&:user)
+
+      # 3. Destroy the membership
       @membership.destroy
 
-      # Important: Log them out of this specific scope immediately
+      # 4. Notify remaining Admins
+      admins_to_notify.each do |admin|
+        MembershipMailer.with(
+          admin: admin, 
+          user: user_who_left, 
+          account: account_context
+        ).member_left.deliver_later
+      end
+
+      # 5. Log them out of this specific scope immediately
       session[:current_account_id] = nil
-      redirect_to root_path, notice: "You have left #{Current.account.name}."
+      redirect_to root_path, notice: "You have left #{account_context.name}."
+
     else
       # --- CASE 2: KICKED (Admin removing someone else) ---
 
+      # 1. Capture data
       user_to_remove = @membership.user
       account_context = @membership.account
 
+      # 2. Destroy
       @membership.destroy
 
-      # Send Notification
-      MembershipMailer.with(user: user_to_remove, account: account_context).removed.deliver_later
+      # 3. Notify the removed user
+      MembershipMailer.with(
+        user: user_to_remove, 
+        account: account_context
+      ).removed.deliver_later
 
       respond_to do |format|
         format.html { redirect_to members_path, notice: "#{user_to_remove.full_name} was removed." }

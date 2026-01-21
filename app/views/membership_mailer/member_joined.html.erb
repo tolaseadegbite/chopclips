@@ -1,0 +1,13 @@
+<p>Hello <%= @admin.first_name %>,</p>
+
+<p>
+  <strong><%= @new_member.full_name %></strong> (<%= @new_member.email %>) has accepted the invitation and joined <strong><%= @account.name %></strong>.
+</p>
+
+<p>
+  They have been added with the role: <strong><%= @new_member.memberships.find_by(account: @account).role.humanize %></strong>.
+</p>
+
+<p>
+  <%= link_to "Manage Team", members_url, target: "_blank" %>
+</p>

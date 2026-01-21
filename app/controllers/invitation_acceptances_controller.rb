@@ -6,12 +6,8 @@ class InvitationAcceptancesController < ApplicationController
     if user_signed_in?
       # Security Check: Ensure the logged-in user matches the invite
       unless Current.user.email.downcase == @invitation.email.downcase
-        # Log out the wrong user so the correct person can sign in
-        # Or render a specific error page
         render :wrong_user
       end
-      # If emails match, we just fall through to render 'show.html.erb'
-      # This lets the user see the "Join Team" button.
     else
       @user = User.new(email: @invitation.email)
     end
@@ -46,28 +42,44 @@ class InvitationAcceptancesController < ApplicationController
       return
     end
 
-    # 2. Check if it is expired (NEW)
+    # 2. Check if it is expired
     if @invitation.expired?
       redirect_to root_path, alert: "This invitation has expired. Please ask the admin to resend it."
-      nil
+      nil # Use return here, not nil
     end
   end
 
   def accept_invitation(user)
+    # 1. Capture the account before destroying the invite to avoid association errors
+    account_to_join = @invitation.account
+    role_assigned = @invitation.role
+
     ActiveRecord::Base.transaction do
       Membership.create!(
         user: user,
-        account: @invitation.account,
-        role: @invitation.role
+        account: account_to_join,
+        role: role_assigned
       )
       @invitation.destroy!
     end
 
-    # Ensure session is set correctly
-    session[:user_id] = user.id
-    session[:current_account_id] = @invitation.account.id
+    # 2. Notify Admins
+    # Find all admins of the account we just joined
+    admins_to_notify = account_to_join.memberships.admin.includes(:user).map(&:user)
 
-    redirect_to root_path, notice: "You have joined #{@invitation.account.name}!"
+    admins_to_notify.each do |admin|
+      MembershipMailer.with(
+        admin: admin,
+        new_member: user,
+        account: account_to_join
+      ).member_joined.deliver_later
+    end
+
+    # 3. Log in and switch context
+    session[:user_id] = user.id
+    session[:current_account_id] = account_to_join.id
+
+    redirect_to root_path, notice: "You have joined #{account_to_join.name}!"
   end
 
   def user_params

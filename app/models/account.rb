@@ -19,4 +19,16 @@ class Account < ApplicationRecord
     # For now, simplest is:
     memberships.count == 1 && memberships.first.admin?
   end
+
+  def seats_used
+    memberships.count + invitations.count
+  end
+
+  def seat_limit_reached?
+    seats_used >= seat_limit
+  end
+
+  def seats_available
+    seat_limit - seats_used
+  end
 end

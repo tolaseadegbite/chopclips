@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(membership) %>" class="border-b last:border-0 hover:bg-highlight transition">
+<tr id="<%= dom_id(membership) %>" class="last:border-0 hover:bg-highlight transition">
   <td class="p-3">
     <div class="flex items-center gap-3">
       <%# Avatar %>
@@ -14,10 +14,34 @@
   </td>
   
   <td class="p-3">
-    <% role_color = membership.admin? ? "border border-green-700 text-green-700" : "bg-black text-reversed" %>
-    <span class="<%= role_color %> pi-2 pb-1 rounded-full text-xs font-medium capitalize">
-      <%= membership.role %>
-    </span>
+    <%# Visual Logic: Different styling for Admin vs Member %>
+    <% if current_role == "Admin" %>
+      <%# --- ADMIN VIEW: Editable Dropdown --- %>
+      <%= form_with model: membership, url: membership_path(membership), method: :patch, data: { turbo_frame: "_top" } do |f| %>
+        
+        <%# Determine class based on current value for visual feedback %>
+        <% select_class = membership.admin? ? "text-green-700 border-green-700 bg-green-50" : "text-subtle bg-shade border-main" %>
+        
+        <div class="relative">
+          <%= f.select :role, 
+              Membership.roles.keys.map { |r| [r.humanize, r] }, 
+              {}, 
+              { 
+                class: "input #{select_class} cursor-pointer capitalize",
+                style: "padding-right: 0rem;", # Make room for chevron
+                onchange: "this.form.requestSubmit()" # Auto-submit JS
+              } 
+          %>
+        </div>
+      <% end %>
+
+    <% else %>
+      <%# --- MEMBER VIEW: Static Badge --- %>
+      <% role_color = membership.admin? ? "border border-green-700 text-green-700" : "bg-black text-reversed" %>
+      <span class="<%= role_color %> pi-2 pb-1 rounded-full text-xs font-medium capitalize">
+        <%= membership.role %>
+      </span>
+    <% end %>
   </td>
 
   <td class="p-3 text-sm text-subtle">
@@ -25,13 +49,13 @@
   </td>
 
   <td class="p-3 text-end">
-    <%# Don't let users remove themselves here (use settings), and don't let members remove anyone %>
+    <%# Delete Logic (Existing) %>
     <% if current_role == "Admin" && membership.user != Current.user %>
-      <% delete_trigger = button_tag type: "button", class: "btn btn--plain text-red-600 hover:bg-red-50 p-2 rounded-md transition", data: { action: "dialog#showModal" } do %>
+      <% delete_trigger = button_tag type: "button", class: "btn btn--plain text-negative hover:bg-red-50 p-2 rounded-md transition", data: { action: "dialog#showModal" } do %>
         <span class="icon icon--trash-2"></span>
         <span class="sr-only">Remove</span>
       <% end %>
-
+      
       <%= modal_dialog delete_trigger, size: "400px", title: "Remove Member?" do %>
         <p class="text-sm text-subtle mbe-6 text-start">
           Are you sure you want to remove <strong><%= membership.user.full_name %></strong>? 

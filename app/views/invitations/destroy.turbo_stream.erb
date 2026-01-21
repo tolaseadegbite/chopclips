@@ -1,2 +1,6 @@
+<%# 1. Update the Flash %>
+<%= turbo_stream.update "flash", partial: "layouts/shared/flash" %>
+
+<%# 2. Remove the row %>
 <%= turbo_stream.remove dom_id(@invitation) %>
 <%= turbo_stream.update "trigger_pending", "Pending Invites (#{Current.account.invitations.count})" %>

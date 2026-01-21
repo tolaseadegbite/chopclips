@@ -64,7 +64,7 @@ Rails.application.routes.draw do
 
   # 3. Team Directory & Invites
   resources :members, only: [ :index ]      # The directory list
-  resources :memberships, only: [ :destroy ] # Removing a user / leaving
+  resources :memberships, only: [ :update, :destroy ] # Removing a user / leaving
   resources :invitations, only: [ :new, :create, :destroy ] # Sending/Revoking invites
 
   # --- Marketing / Static ---

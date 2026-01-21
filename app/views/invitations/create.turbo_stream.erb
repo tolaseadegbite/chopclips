@@ -1,8 +1,9 @@
-<%# 1. Append the new row to the pending list %>
+<%# 1. Update the Flash %>
+<%= turbo_stream.update "flash", partial: "layouts/shared/flash" %>
+
+<%# 2. Append the new row %>
 <%= turbo_stream.prepend "invitations-list", partial: "invitations/invitation", locals: { invitation: @invitation } %>
 
-<%# 2. Reset the modal form %>
+<%# 3. Reset the modal & counter %>
 <%= turbo_stream.replace "modal", "" %>
-
-<%# 3. Update the counter (Optional polish) %>
 <%= turbo_stream.update "trigger_pending", "Pending Invites (#{Current.account.invitations.count})" %>

@@ -11,8 +11,8 @@ class InvitationsController < ApplicationController
     if @invitation.save
       InvitationMailer.with(invitation: @invitation).invite.deliver_later
       respond_to do |format|
-        format.html { redirect_to members_path, notice: "Invitation sent." }
-        format.turbo_stream
+        format.html { redirect_to members_path, notice: "Invitation sent successfully." }
+        format.turbo_stream { flash.now[:notice] = "Invitation sent successfully." }
       end
     else
       render :new, status: :unprocessable_entity
@@ -25,7 +25,7 @@ class InvitationsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to members_path, notice: "Invitation revoked." }
-      format.turbo_stream
+      format.turbo_stream { flash.now[:notice] = "Invitation revoked." }
     end
   end
 

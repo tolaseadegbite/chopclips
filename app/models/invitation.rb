@@ -19,6 +19,10 @@ class Invitation < ApplicationRecord
   # Don't invite someone who is already a member
   validate :email_not_already_member
 
+  def expired?
+    expires_at < Time.current
+  end
+
   private
 
   def set_expiration

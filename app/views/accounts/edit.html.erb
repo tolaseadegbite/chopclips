@@ -24,7 +24,7 @@
 
         <div class="flex flex-col gap-1 mbe-6">
           <%= form.label :name, "Display Name", class: "text-sm font-medium" %>
-          <%= form.text_field :name, required: true, class: "input" %>
+          <%= form.text_field :name, required: true, class: "input", style: "input" %>
         </div>
 
         <div class="flex items-center justify-end">
@@ -37,7 +37,7 @@
   <%# --- DANGER ZONE --- %>
   <div class="border rounded-lg bg-surface overflow-hidden" style="border-color: var(--color-negative);">
     <div class="p-6" style="border-color: var(--color-negative);">
-      <h3 class="font-bold text-lg text-negative mbe-1">Danger Zone</h3>
+      <h3 class="font-bold text-lg text-red-500 mbe-1">Danger Zone</h3>
       <p class="text-sm text-subtle">Irreversible actions for this workspace.</p>
     </div>
 
@@ -50,20 +50,30 @@
       <% delete_trigger = button_tag "Delete Workspace", type: "button", class: "btn text-gray-50 border-0 font-bold bg-red-600 hover:bg-red-800", data: { action: "dialog#showModal" } %>
       
       <%= modal_dialog delete_trigger, size: "450px", title: "Delete #{@account.name}?" do %>
-        <p class="text-sm text-subtle mbe-6">
-          Are you sure you want to delete <strong><%= @account.name %></strong>? 
-          <br><br>
-          All projects, clips, and team memberships will be permanently destroyed. 
-          This action <strong>cannot</strong> be undone.
-        </p>
         
-        <div class="flex items-center justify-end gap-2">
-          <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+        <%# WRAP CONTENT IN A FORM TO HANDLE PASSWORD SUBMISSION %>
+        <%= form_with url: account_path(@account), method: :delete, class: "flex flex-col gap-4" do |f| %>
           
-          <%= button_to account_path(@account), method: :delete, class: "btn text-gray-50 border-0 font-bold bg-red-600 hover:bg-red-800" do %>
-            I understand, delete it
-          <% end %>
-        </div>
+          <p class="text-sm text-subtle">
+            Are you sure you want to delete <strong><%= @account.name %></strong>? 
+            <br><br>
+            All projects, clips, and team memberships will be permanently destroyed. 
+            This action <strong>cannot</strong> be undone.
+          </p>
+
+          <%# PASSWORD CHALLENGE INPUT %>
+          <div class="">
+            <%= f.label :password_challenge, "Enter your password to confirm", class: "block text-xs font-bold text-red-500 mbe-2" %>
+            <%= f.password_field :password_challenge, required: true, class: "input border-red-500", placeholder: "Your password" %>
+          </div>
+          
+          <div class="flex items-center justify-end gap-2 mts-2">
+            <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+            
+            <%= f.submit "I understand, delete it", class: "btn text-gray-50 border-0 font-bold bg-red-600 hover:bg-red-800" %>
+          </div>
+
+        <% end %>
       <% end %>
     </div>
   </div>

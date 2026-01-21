@@ -1,5 +1,5 @@
 <%# 1. Update the Flash %>
-<%= turbo_stream.update "flash", partial: "layouts/shared/flash" %>
+<%= turbo_stream.update "flash_messages", partial: "layouts/shared/flash" %>
 
 <%# 2. Remove the row %>
 <%= turbo_stream.remove dom_id(@invitation) %>

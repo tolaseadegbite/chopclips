@@ -10,14 +10,22 @@
   </td>
 
   <td class="p-3 text-sm text-subtle">
-    <%= time_ago_in_words(invitation.created_at) %> ago
+    <%= time_ago_in_words(invitation.updated_at) %> ago
   </td>
 
   <td class="p-3 text-end">
     <% if current_role == "Admin" %>
-      <%= button_to invitation_path(invitation), method: :delete, class: "btn text-xs text-negative hover:underline", form: { data: { turbo_confirm: "Revoke this invitation?" } } do %>
-        Revoke
-      <% end %>
+      <div class="flex items-center justify-end gap-3">
+        <%# Resend Button %>
+        <%= button_to resend_invitation_path(invitation), method: :post, class: "btn text-xs text-subtle hover:text-primary hover:underline", form: { data: { turbo_submits_with: "Sending..." } } do %>
+          Resend
+        <% end %>
+
+        <%# Revoke Button %>
+        <%= button_to invitation_path(invitation), method: :delete, class: "btn text-xs text-red-500 hover:underline", form: { data: { turbo_confirm: "Revoke this invitation?" } } do %>
+          Revoke
+        <% end %>
+      </div>
     <% end %>
   </td>
 </tr>

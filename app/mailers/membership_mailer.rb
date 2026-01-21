@@ -9,4 +9,14 @@ class MembershipMailer < ApplicationMailer
       subject: "Your role in #{@account.name} has been updated"
     )
   end
+
+  def removed
+    @user = params[:user]
+    @account = params[:account]
+
+    mail(
+      to: @user.email,
+      subject: "You have been removed from #{@account.name}"
+    )
+  end
 end

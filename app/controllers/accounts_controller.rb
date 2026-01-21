@@ -1,6 +1,7 @@
 class AccountsController < DashboardsController
   before_action :authenticate!
   before_action :ensure_admin!, only: [ :edit, :update, :destroy ]
+  # before_action :require_sudo, only: :destroy
 
   def new
     @account = Account.new
@@ -40,14 +41,22 @@ class AccountsController < DashboardsController
   def destroy
     @account = Current.account
 
-    if Current.user.accounts.count == 1
-      redirect_to edit_account_path(@account), alert: "You cannot delete your personal workspace."
+    # 1. Verify Password Challenge
+    unless Current.user.authenticate(params[:password_challenge])
+      # If using Turbo, we need to re-render the modal with an error.
+      # For simplicity, we redirect back with an alert, but Turbo Stream is better.
+      redirect_to edit_account_path(@account), alert: "Incorrect password. Workspace was not deleted."
       return
     end
 
-    @account.destroy
+    # 2. Safety Checks
+    if Current.user.accounts.count == 1
+      redirect_to edit_account_path(@account), alert: "You cannot delete your only remaining workspace."
+      return
+    end
 
-    # Reset session and fallback
+    # 3. Destroy
+    @account.destroy
     session[:current_account_id] = nil
     redirect_to root_path, notice: "Workspace deleted."
   end

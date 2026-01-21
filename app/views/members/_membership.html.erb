@@ -28,8 +28,8 @@
               {}, 
               { 
                 class: "input #{select_class} cursor-pointer capitalize",
-                style: "padding-right: 0rem;", # Make room for chevron
-                onchange: "this.form.requestSubmit()" # Auto-submit JS
+                style: "padding-right: 0rem;", 
+                onchange: "this.form.requestSubmit()" 
               } 
           %>
         </div>
@@ -49,8 +49,31 @@
   </td>
 
   <td class="p-3 text-end">
-    <%# Delete Logic (Existing) %>
-    <% if current_role == "Admin" && membership.user != Current.user %>
+    <%# --- ACTION BUTTONS --- %>
+    
+    <% if membership.user == Current.user %>
+      
+      <%# CASE 1: IT IS ME (Leave Button) %>
+      <% leave_trigger = button_tag type: "button", class: "btn btn--plain text-subtle hover:text-negative p-2 rounded-md transition", title: "Leave Team", data: { action: "dialog#showModal" } do %>
+        <span class="icon icon--log-out"></span>
+        <span class="sr-only">Leave</span>
+      <% end %>
+
+      <%= modal_dialog leave_trigger, size: "400px", title: "Leave Workspace?" do %>
+        <p class="text-sm text-subtle mbe-6 text-start">
+          Are you sure you want to leave <strong><%= Current.account.name %></strong>?
+          <br>
+          You will lose access to all projects and clips immediately.
+        </p>
+        <div class="flex items-center justify-end gap-3 text-start">
+          <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+          <%= button_to "Leave Team", membership_path(membership), method: :delete, class: "btn btn--negative" %>
+        </div>
+      <% end %>
+
+    <% elsif current_role == "Admin" %>
+      
+      <%# CASE 2: IT IS SOMEONE ELSE & I AM ADMIN (Remove Button) %>
       <% delete_trigger = button_tag type: "button", class: "btn btn--plain text-negative hover:bg-red-50 p-2 rounded-md transition", data: { action: "dialog#showModal" } do %>
         <span class="icon icon--trash-2"></span>
         <span class="sr-only">Remove</span>
@@ -66,6 +89,7 @@
           <%= button_to "Remove Member", membership_path(membership), method: :delete, class: "btn btn--negative" %>
         </div>
       <% end %>
+
     <% end %>
   </td>
 </tr>

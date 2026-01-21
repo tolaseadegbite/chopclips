@@ -65,7 +65,11 @@ Rails.application.routes.draw do
   # 3. Team Directory & Invites
   resources :members, only: [ :index ]      # The directory list
   resources :memberships, only: [ :update, :destroy ] # Removing a user / leaving
-  resources :invitations, only: [ :new, :create, :destroy ] # Sending/Revoking invites
+  resources :invitations, only: [ :new, :create, :destroy ] do
+    member do
+      post :resend
+    end
+  end
 
   # --- Marketing / Static ---
   get "pricing", to: "static_pages#pricing"

@@ -39,7 +39,18 @@ class InvitationAcceptancesController < ApplicationController
 
   def find_invitation
     @invitation = Invitation.find_by(token: params[:token])
-    redirect_to root_path, alert: "Invalid invitation." unless @invitation
+
+    # 1. Check if it exists
+    if @invitation.nil?
+      redirect_to root_path, alert: "Invalid invitation link."
+      return
+    end
+
+    # 2. Check if it is expired (NEW)
+    if @invitation.expired?
+      redirect_to root_path, alert: "This invitation has expired. Please ask the admin to resend it."
+      nil
+    end
   end
 
   def accept_invitation(user)

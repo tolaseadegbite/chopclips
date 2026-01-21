@@ -20,10 +20,10 @@
   <div class="tabs i-full" data-controller="tabs">
     <div class="tabs__list mbe-4" style="max-inline-size: 400px" role="tablist">
       <button type="button" id="trigger_active" class="btn tabs__button" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_active" aria-selected="true">
-        Active Members (<%= @active_memberships.count %>)
+        Active Members <div class="badge badge--number badge--positive"><%= @active_memberships.count %></div>
       </button>
       <button type="button" id="trigger_pending" class="btn tabs__button" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_pending">
-        Pending Invites (<%= @pending_invitations.count %>)
+        Pending Invites <div class="badge badge--number badge--primary"><%= @pending_invitations.count %></div>
       </button>
     </div>
 

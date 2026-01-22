@@ -1,0 +1,15 @@
+<% content_for :title, "Notifications" %>
+
+<div class="container i-full p-4 mi-auto" style="max-inline-size: 600px;">
+  <h1 class="text-2xl font-bold mbe-4">Notifications</h1>
+  
+  <div class="flex flex-col border border-main rounded-lg bg-surface">
+    <div id="notifications-list">
+      <% if @notifications.any? %>
+        <%= render @notifications %>
+      <% else %>
+        <div class="p-8 text-center text-subtle">You have no notifications.</div>
+      <% end %>
+    </div>
+  </div>
+</div>

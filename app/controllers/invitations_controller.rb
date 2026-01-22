@@ -7,7 +7,6 @@ class InvitationsController < ApplicationController
   end
 
   def create
-    # 1. Guard: Check Seat Limits
     if Current.account.seat_limit_reached?
       message = "You have reached your seat limit of #{Current.account.seat_limit}. Please upgrade to invite more members."
 
@@ -24,7 +23,17 @@ class InvitationsController < ApplicationController
     @invitation = Current.account.invitations.new(invitation_params)
 
     if @invitation.save
+      # 1. Always send the Email (The bridge)
       InvitationMailer.with(invitation: @invitation).invite.deliver_later
+
+      # 2. Logic for Existing Users (The in-app magic)
+      # We lowercase the email for a robust lookup
+      if existing_user = User.find_by(email: @invitation.email.downcase)
+        InvitationReceivedNotifier.with(
+          account_name: Current.account.name,
+          token: @invitation.token
+        ).deliver_later(existing_user)
+      end
 
       respond_to do |format|
         format.html { redirect_to members_path, notice: "Invitation sent successfully." }

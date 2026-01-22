@@ -79,3 +79,5 @@ gem "pwned"
 gem "omniauth"
 # Provides a mitigation against CVE-2015-9284 [https://github.com/cookpad/omniauth-rails_csrf_protection]
 gem "omniauth-rails_csrf_protection"
+
+gem "noticed", "~> 3.0"

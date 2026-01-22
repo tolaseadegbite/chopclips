@@ -26,6 +26,8 @@ class User < ApplicationRecord
   has_many :projects, dependent: :destroy
   has_many :clips, dependent: :destroy
 
+  has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
+
   validates :first_name, :last_name, presence: true
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, allow_nil: true, length: { minimum: 12 }

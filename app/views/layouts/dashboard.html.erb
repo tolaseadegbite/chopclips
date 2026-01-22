@@ -23,7 +23,7 @@
     <%= stylesheet_link_tag "css-zero/utilities", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
-    <%= turbo_stream_from current_user, "history" %>
+    <%= turbo_stream_from "notifications_#{current_user.id}" %>
   </head>
 
   <body class="bg-main" data-controller="color-scheme audio-player audio-fetcher">

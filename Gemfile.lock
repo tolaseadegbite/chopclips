@@ -235,6 +235,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.19.0-x86_64-linux-musl)
       racc (~> 1.4)
+    noticed (3.0.0)
+      rails (>= 6.1.0)
     omniauth (2.1.4)
       hashie (>= 3.4.6)
       logger
@@ -455,6 +457,7 @@ DEPENDENCIES
   kamal
   letter_opener_web (~> 3.0)
   mission_control-jobs
+  noticed (~> 3.0)
   omniauth
   omniauth-rails_csrf_protection
   pagy (~> 9.4)

@@ -51,6 +51,9 @@ Rails.application.routes.draw do
     resources :clips, only: [ :show ] # /projects/1/clips/2
   end
 
+  # This enables the /notifications page for mobile users
+  resources :notifications, only: [:index, :show]
+
   # --- Team & Workspace Management ---
   # 1. Workspace CRUD & Switching
   resources :accounts, only: [ :new, :create, :edit, :update, :destroy ] do

@@ -20,7 +20,7 @@
             class: "btn sidebar-menu__button",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
 
-      <%= link_to "Send invitation", new_invitation_path,
+      <%#= link_to "Send invitation", new_invitation_path,
             class: "btn sidebar-menu__button",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
       
@@ -64,7 +64,7 @@
     <%= link_to "Change name", edit_identity_name_path, class: "btn sidebar-menu__button" %>
     <%= link_to "Change password", edit_password_path, class: "btn sidebar-menu__button" %>
     <%= link_to "Change email address", edit_identity_email_path, class: "btn sidebar-menu__button" %>
-    <%= link_to "Send invitation", new_invitation_path, class: "btn sidebar-menu__button" %>
+    <%#= link_to "Send invitation", new_invitation_path, class: "btn sidebar-menu__button" %>
     <%= button_to "Signin as last user", user_masquerade_path(User.last), class: "btn sidebar-menu__button" %>
     
     <hr class="menu__separator" role="separator"/>

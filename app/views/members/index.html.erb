@@ -18,14 +18,14 @@
     <%# --- CONDITIONAL BUTTON --- %>
     <% if Current.account.seat_limit_reached? %>
       <%# Limit Reached: Show Upgrade Button (Placeholder link) %>
-      <%= link_to "#billing", class: "btn bg-purple-600 text-reversed hover:bg-purple-700 font-semibold rounded-md p-2 flex items-center gap-2" do %>
+      <%= link_to "#billing", class: "btn bg-sky-600 text-gray-50 hover:bg-sky-700 font-semibold rounded-md p-2 flex items-center gap-2 border-0" do %>
         <span class="icon icon--sparkles"></span>
         <span>Upgrade to Pro</span>
       <% end %>
     <% else %>
       <%# Seats Available: Show Invite Button %>
       <%= link_to new_invitation_path, 
-                  class: "btn bg-teal-600 text-reversed hover:bg-teal-700 font-semibold rounded-md p-2 flex items-center gap-2", 
+                  class: "btn bg-emerald-900 border-0 text-gray-50 hover:bg-green-700", 
                   data: { turbo_frame: "modal" } do %>
         <span class="icon icon--plus"></span>
         <span>Invite Member</span>

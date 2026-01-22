@@ -110,6 +110,7 @@ img.icon {
 .icon--vc { --svg: url("vc.svg"); }
 .icon--trash-2 { --svg: url("trash-2.svg"); }
 .icon--bell { --svg: url("bell.svg"); }
+.icon--sparkles { --svg: url("sparkles.svg"); }
 .icon--rotate-3d { --svg: url("rotate-3d.svg"); }
 .icon--voices { --svg: url("voices.svg"); }
 .icon--boom-box { --svg: url("boom-box.svg"); }

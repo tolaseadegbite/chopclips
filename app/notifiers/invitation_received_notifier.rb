@@ -5,6 +5,6 @@ class InvitationReceivedNotifier < TeamNotifier
 
   # The URL Bob clicks in his notification list
   def url
-    Rails.application.routes.url_helpers.invitation_acceptance_url(token: params[:token])
+    Rails.application.routes.url_helpers.invitation_acceptance_path(token: params[:token])
   end
 end

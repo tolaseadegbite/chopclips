@@ -52,7 +52,7 @@ Rails.application.routes.draw do
   end
 
   # This enables the /notifications page for mobile users
-  resources :notifications, only: [:index, :show]
+  resources :notifications, only: [ :index, :show ]
 
   # --- Team & Workspace Management ---
   # 1. Workspace CRUD & Switching

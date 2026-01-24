@@ -101,45 +101,7 @@ h3, h4, h5, h6 {
   background-color: var(--color-border-light);
 }
 
-#settings-column {
-  border-inline-start: none;
-}
-
-@media (width >= 64rem) {
-  #settings-column {
-    border-inline-start: 1px solid var(--color-border);
-  }
-}
-
-/* Voice library */
-
-/* The purple gradient for the icon wrapper. */
-.v-library-bg-grad {
-  background-image: linear-gradient(135deg, rgb(96, 212, 174), rgb(15, 92, 66));
-}
-
 .min-b-0, .min-h-0 { min-block-size: 0; }
-
-.fixed-player {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 50; /* Ensures it's above other page content */
-  
-  /* Styling */
-  background-color: var(--color-bg); /* Uses your main background color variable */
-  /* border-top: 1px solid var(--color-border); */
-}
-
-.sample-icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  border-radius: var(--rounded-full);
-}
 
 /* Combines a fade-in and a slide-in-from-bottom effect */
 .animate-fade-slide-in-up {
@@ -152,95 +114,20 @@ h3, h4, h5, h6 {
   animation: var(--animate-fade-out) forwards, var(--animate-slide-out-down) forwards;
 }
 
-.fixed-player.is-minimized [data-player-visibility-target="collapsible"] {
-  display: none;
-}
-
 /* By default, the 'expand' (chevron-up) icon is hidden. */
 .expand-icon {
   display: none;
-}
-
-/* When the player has the 'is-minimized' class... */
-.fixed-player.is-minimized .minimize-icon {
-  /* ...hide the 'minimize' (chevron-down) icon. */
-  display: none;
-}
-
-.fixed-player.is-minimized .expand-icon {
-  /* ...and show the 'expand' (chevron-up) icon. */
-  display: inline-block; /* Use inline-block for proper rendering of an icon */
 }
 
 .progress-bar-container {
   cursor: pointer;
 }
 
-/* When the player is minimized... */
-.fixed-player.is-minimized .progress-bar-container {
-  /* ...add vertical padding to create a larger click target. */
-  padding-block: 1rem;
-}
-
-.fixed-player.is-minimized .progress-bar {
-  /* ...center the progress bar and give it a fixed width. */
-  inline-size: 200px;
-  margin-inline: auto;
-}
-
-.dropzone {
-max-inline-size: var(--max-i-lg);
-}
-
-/* --- Sound Effects Page Layout --- */
-
-/* A container to hold the background gradient */
-.sfx-background {
-  position: relative;
-  overflow: hidden; /* Ensures the gradient doesn't spill out */
-}
-
-/* The soft blue/green radial gradient at the bottom of the page */
-.sfx-background::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -50%;
-  right: -50%;
-  height: 50%;
-  z-index: -1;
-  background-image: radial-gradient(ellipse at bottom, hsla(195, 53%, 79%, 0.15), transparent 70%);
-}
-
-/* A wrapper to center the main content vertically and horizontally */
-.sfx-content-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--size-4);
-  min-height: 100%;
-}
-
-/* Base styles for the cards on the page */
-.sfx-card {
-  width: 100%;
-  max-width: var(--max-i-3xl); /* 48rem, a good width for content */
-  background-color: var(--color-bg);
-  border-radius: var(--rounded-lg);
-  box-shadow: var(--shadow-md);
-  padding: var(--size-4);
-}
-
-.history-card {
-  height: 70dvh !important; /* Fixed height for the history card */
-}
-
 /*
 * star rating
 */
 
-.rating {
+.ting {
   display: flex;
   width: 100%;
   justify-content: left;

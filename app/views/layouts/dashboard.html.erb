@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
+    
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
@@ -28,36 +28,34 @@
 
     <%# 2. Listen for Context-Specific Events (Role changes in THIS workspace) %>
     <% if Current.account %>
-      <%= turbo_stream_from "notifications_#{current_user.id}_account_#{Current.account.id}" %>
+    <%= turbo_stream_from "notifications_#{current_user.id}_account_#{Current.account.id}" %>
     <% end %>
   </head>
-
-  <body class="bg-main" data-controller="color-scheme audio-player audio-fetcher">
+  
+  <body class="bg-main" data-controller="color-scheme">
     <%# --- This layout is for SIGNED-IN users --- %>
-
     <div id="flash_messages">
-      <%= render "layouts/shared/flash" %>
+        <%= render "layouts/shared/flash" %>
     </div>
 
     <%#= render "layouts/navigation/navbar" %>
 
     <div class="sidebar-layout">
-      <aside id="sidebar">
-        <%= render "layouts/navigation/dashboard/sidebar_menu" %>
-      </aside>
+        <aside id="sidebar">
+            <%= render "layouts/navigation/dashboard/sidebar_menu" %>
+        </aside>
 
-      <main id="main" style="padding: 0; gap: 0">
-        <div class="header-layout">
-          <header class="" id="header">
-            <%= render "layouts/navigation/dashboard/mobile_menu" %>
-            <%= render "layouts/navigation/dashboard/header_menu" %>
-          </header>
-        <%= yield %>
+        <main id="main" style="padding: 0; gap: 0">
+            <div class="header-layout">
+            <header class="" id="header">
+                <%= render "layouts/navigation/dashboard/mobile_menu" %>
+                <%= render "layouts/navigation/dashboard/header_menu" %>
+            </header>
+            <%= yield %>
 
-      </main>
+        </main>
     </div>
-    
+
     <%= turbo_frame_tag "modal" %>
-    
   </body>
 </html>

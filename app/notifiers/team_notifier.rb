@@ -1,10 +1,10 @@
 class TeamNotifier < Noticed::Event
-  # 2. Turbo Stream Delivery (Real-time UI updates)
   deliver_by :turbo_stream, class: "DeliveryMethods::TurboStreamDelivery"
 
-  # Helpers
-  def message
-    raise NotImplementedError
+  def recipient_attributes_for(recipient)
+    # FIX: Call super first to get recipient_type and recipient_id,
+    # then merge in your custom account_id.
+    super.merge(account_id: params[:account_id])
   end
 
   def url

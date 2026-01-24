@@ -6,12 +6,28 @@ class ApplicationController < ActionController::Base
 
   # Make these methods available as helpers in all views
   helper_method :current_user, :user_signed_in?
+  helper_method :context_notifications
 
   # These before_actions run in order on every request
   before_action :set_current_request_details
   before_action :set_current_user_from_session
   before_action :set_current_account
   before_action :authenticate!
+
+  def context_notifications
+    # Memoize to prevent multiple DB queries in one request
+    @_context_notifications ||= begin
+      # 1. Base Scope: The current user
+      scope = current_user.notifications
+
+      # 2. Filter: Only this account OR Global (nil)
+      #    This prevents "Account 1" events from showing in "Account 2"
+      scope = scope.where(account_id: [ Current.account.id, nil ]) if Current.account
+
+      # 3. Sort
+      scope.newest_first
+    end
+  end
 
   private
 

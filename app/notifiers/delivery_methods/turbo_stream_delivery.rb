@@ -1,38 +1,37 @@
 class DeliveryMethods::TurboStreamDelivery < Noticed::DeliveryMethod
   def deliver
-    # 1. Update Sidebar List
+    # 1. Determine Stream Name
+    # Use 'notification.params' instead of 'record.params' for stability in v2
+    account_id = notification.params[:account_id]
+
+    stream_name = if account_id.present?
+                    "notifications_#{recipient.id}_account_#{account_id}"
+    else
+                    "notifications_#{recipient.id}_global"
+    end
+
+    # 2. Calculate Unread State
+    scope = recipient.notifications.unread
+    scope = scope.where(account_id: [ account_id, nil ]) if account_id
+    has_unread = scope.any?
+
+    # 3. Broadcast Badge (Header & Sidebar)
+    [ "header", "sidebar" ].each do |location|
+      recipient.broadcast_replace_to(
+        stream_name,
+        target: "#{location}-notification-badge",
+        partial: "notifications/badge",
+        locals: { unread: has_unread, id_suffix: location }
+      )
+    end
+
+    # 4. Broadcast List Item
+    # Note: We only target "sidebar" for the list, as the header is just a bell icon
     recipient.broadcast_prepend_to(
-      "notifications_#{recipient.id}",
+      stream_name,
       target: "sidebar-notifications-list",
       partial: "notifications/notification",
       locals: { notification: notification }
-    )
-
-    # 2. Update Header List (for Mobile if they are on that page)
-    # Note: If you have a specific mobile index page list ID, target that too.
-    # Here we assume the header might have a hidden list or similar.
-    # If the mobile view is a full page /notifications, target that ID:
-    recipient.broadcast_prepend_to(
-      "notifications_#{recipient.id}",
-      target: "notifications-list", # The ID used in app/views/notifications/index.html.erb
-      partial: "notifications/notification",
-      locals: { notification: notification }
-    )
-
-    # 3. Update Sidebar Badge
-    recipient.broadcast_replace_to(
-      "notifications_#{recipient.id}",
-      target: "sidebar-notification-badge",
-      partial: "notifications/badge",
-      locals: { unread: true, id_suffix: "sidebar" }
-    )
-
-    # 4. Update Header Badge
-    recipient.broadcast_replace_to(
-      "notifications_#{recipient.id}",
-      target: "header-notification-badge",
-      partial: "notifications/badge",
-      locals: { unread: true, id_suffix: "header" }
     )
   end
 end

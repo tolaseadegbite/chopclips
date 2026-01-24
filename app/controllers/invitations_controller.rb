@@ -1,4 +1,4 @@
-class InvitationsController < ApplicationController
+class InvitationsController < DashboardsController
   before_action :authenticate!
   before_action :set_invitation, only: [ :destroy, :resend ]
 
@@ -7,6 +7,7 @@ class InvitationsController < ApplicationController
   end
 
   def create
+    # 1. Guard: Check Seat Limits
     if Current.account.seat_limit_reached?
       message = "You have reached your seat limit of #{Current.account.seat_limit}. Please upgrade to invite more members."
 
@@ -26,10 +27,12 @@ class InvitationsController < ApplicationController
       # 1. Always send the Email (The bridge)
       InvitationMailer.with(invitation: @invitation).invite.deliver_later
 
-      # 2. Logic for Existing Users (The in-app magic)
+      # 2. In-App Notification for Existing Users
       # We lowercase the email for a robust lookup
       if existing_user = User.find_by(email: @invitation.email.downcase)
         InvitationReceivedNotifier.with(
+          # NOTE: We DO NOT pass account_id here.
+          # This ensures it broadcasts to the '_global' stream, so the user sees it anywhere.
           account_name: Current.account.name,
           token: @invitation.token
         ).deliver_later(existing_user)
@@ -45,7 +48,7 @@ class InvitationsController < ApplicationController
   end
 
   def resend
-    # 2. Guard: Rate Limiting (5-minute cooldown)
+    # Guard: Rate Limiting (5-minute cooldown)
     if @invitation.updated_at > 5.minutes.ago
       flash.now[:alert] = "Please wait a few minutes before resending."
       render turbo_stream: turbo_stream.update("flash_messages", partial: "layouts/shared/flash")

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_23_074916) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_23_145731) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -89,6 +89,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_23_074916) do
   end
 
   create_table "noticed_notifications", force: :cascade do |t|
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.bigint "event_id", null: false
     t.string "public_id"
@@ -98,6 +99,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_23_074916) do
     t.datetime "seen_at", precision: nil
     t.string "type"
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_noticed_notifications_on_account_id"
     t.index ["event_id"], name: "index_noticed_notifications_on_event_id"
     t.index ["public_id"], name: "index_noticed_notifications_on_public_id", unique: true
     t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
@@ -159,6 +161,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_23_074916) do
   add_foreign_key "invitations", "accounts"
   add_foreign_key "memberships", "accounts"
   add_foreign_key "memberships", "users"
+  add_foreign_key "noticed_notifications", "accounts"
   add_foreign_key "projects", "accounts"
   add_foreign_key "projects", "users"
   add_foreign_key "sessions", "users"

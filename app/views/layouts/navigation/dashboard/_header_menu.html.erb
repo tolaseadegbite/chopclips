@@ -30,11 +30,15 @@
       <% end %>
 
       <%# Header Notification Bell (Direct Link for Mobile) %>
-      <%= link_to notifications_path, class: "btn btn--icon border-0 cursor-pointer hide@md" do %>
+      <%= link_to notifications_path, class: "btn btn--icon hide@md" do %>
         <div class="relative">
-          <span class="icon icon--bell p-3" aria-hidden="true"></span>
-          <%# Pass explicit ID suffix for header %>
-          <%= render "notifications/badge", unread: current_user.notifications.unread.any?, id_suffix: "header" %>
+          <span class="icon icon--bell p-3"></span>
+          
+          <%# FIX: Use the scoped helper. 
+              Now the dot only appears if there are notifications FOR THIS WORKSPACE. %>
+          <%= render "notifications/badge", 
+              unread: context_notifications.unread.any?, 
+              id_suffix: "header" %>
         </div>
       <% end %>
 

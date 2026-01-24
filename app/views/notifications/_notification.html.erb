@@ -1,7 +1,7 @@
-<div id="<%= dom_id(notification) %>" class="p-1 <%= 'bg-shade' if notification.unread? %>">
-  <%= link_to notification_path(notification), class: "block p-2 popover__item rounded-md" do %>
+<div id="<%= dom_id(notification) %>" class="p-1">
+  <%= link_to notification_path(notification), class: "block p-2 popover__item rounded-md #{'bg-shade' if notification.unread?}" do %>
     <div class="flex flex-col gap-half">
-      <p class="font-semibold text-sm text-primary"><%= notification.event.message %></p>
+      <p class="font-semibold text-sm text-primary"><%= notification_message(notification) %></p>
       <p class="text-xs text-subtle"><%= time_ago_in_words(notification.created_at) %> ago</p>
     </div>
   <% end %>

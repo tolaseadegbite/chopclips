@@ -1,10 +1,14 @@
 class MemberRemovedNotifier < TeamNotifier
-  def message
-    "You have been removed from #{params[:account_name]}."
-  end
+  # def message
+  #   if recipient.id == params[:user_id]
+  #     "You have been removed from #{params[:account_name]}."
+  #   else
+  #     "#{params[:user_name]} was removed from the team by #{params[:actor_name]}."
+  #   end
+  # end
 
-  # Override the default URL because they can no longer access the members page of that team
-  def url
-    Rails.application.routes.url_helpers.root_path
-  end
+  # def url
+  #   # Removed users shouldn't link to the members page they can't see
+  #   recipient.id == params[:user_id] ? Rails.application.routes.url_helpers.root_path : super
+  # end
 end

@@ -6,35 +6,34 @@
 
   <%# --- WORKSPACE SWITCHER --- %>
   <div contents 
-       class="mbe-4"
-       data-controller="popover" 
-       data-popover-placement-value="bottom-start" 
-       data-action="click@window->popover#clickOutside">
+      class="mbe-4"
+      data-controller="popover" 
+      data-popover-placement-value="bottom-start" 
+      data-action="click@window->popover#clickOutside">
     
     <%= button_tag type: "button", 
-                   class: "btn sidebar-menu__button workspace-button i-full", 
-                   data: { action: "click->popover#toggle", popover_target: "trigger" }, 
-                   aria: { haspopup: "true" } do %>
+                  class: "btn sidebar-menu__button workspace-button i-full", 
+                  data: { action: "click->popover#toggle", popover_target: "trigger" }, 
+                  aria: { haspopup: "true" } do %>
       
       <div class="flex flex-item-no-shrink overflow-hidden rounded-md bg-green-600">
-        <div class="flex items-center justify-center font-bold text-sm" style="width: 36px; height: 36px;">
+        <div class="flex items-center justify-center font-bold text-reversed text-sm" style="inline-size: 2.25rem; block-size: 2.25rem;">
           <%= account_initials(Current.account) %> 
         </div>
       </div>
 
       <div class="flex flex-col text-start leading-tight overflow-hidden mis-2">
         <span class="overflow-ellipsis font-semibold"><%= Current.account.name %></span>
-        <span class="overflow-ellipsis text-xs text-gray-500 capitalize">
+        <span class="overflow-ellipsis text-xs text-subtle capitalize">
           <%= current_role %>
         </span>
       </div>
       
-      <span class="icon icon--chevrons-up-down mis-auto text-gray-400" aria-hidden="true"></span>
+      <span class="icon icon--chevrons-up-down mis-auto text-subtle" aria-hidden="true"></span>
     <% end %>
 
-    <%# Switcher Popover Content %>
     <%= tag.div popover: true, id: "workspace-switcher-popover", class: "popover", style: "--popover-size: 16rem;", data: { popover_target: "content" } do %>
-      <div class="p-2 text-xs font-semibold text-gray-500 uppercase i-full">
+      <div class="p-2 text-xs font-semibold text-subtle uppercase i-full">
         Switch Workspace
       </div>
       
@@ -42,27 +41,27 @@
         <% Current.user.accounts.each do |account| %>
           <% is_active = account == Current.account %>
           
-          <%= link_to switch_account_path(account), 
-              data: { turbo_method: :post }, 
-              class: "btn menu__item justify-between i-full #{is_active ? 'bg-green-600 text-reversed hover:bg-green-700' : 'hover:bg-shade'}", 
-              role: "menuitem" do %>
-            
+          <%# RESTORED: button_to with disabled: is_active as we had it before %>
+          <%= button_to switch_account_path(account), 
+              method: :post, 
+              class: "i-full btn menu__item justify-between #{'bg-green-600 text-reversed' if is_active}", 
+              role: "menuitem", 
+              disabled: is_active do %>
             <div class="flex items-center gap-2">
-              <div class="p-1 rounded-md flex items-center justify-center text-xs font-bold w-6 h-6 bg-black text-reversed">
+              <div class="rounded-md flex flex-item-no-shrink items-center justify-center text-xs font-bold bg-black text-reversed" style="inline-size: 1.5rem; block-size: 1.5rem;">
                 <%= account_initials(account) %>
               </div>
               <span class="<%= 'font-bold' if is_active %>">
                 <%= account.name %>
               </span>
             </div>
-
             <% if is_active %>
               <span class="icon icon--check text-reversed" aria-hidden="true"></span>
             <% end %>
           <% end %>
         <% end %>
 
-        <hr class="menu__separator my-1" role="separator"/>
+        <hr class="menu__separator m-1" role="separator"/>
         
         <%= link_to new_account_path, class: "btn menu__item", data: { turbo_frame: "modal" } do %>
           <span class="icon icon--plus" aria-hidden="true"></span>

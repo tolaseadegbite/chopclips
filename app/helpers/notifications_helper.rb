@@ -58,4 +58,20 @@ module NotificationsHelper
       event.url rescue root_path
     end
   end
+
+  def notification_avatar_initials(notification)
+    params = notification.event.params
+    if params[:user_name].present?
+      # Show User Initials (e.g. for joins, roles, leaves)
+      params[:user_name].split.first(2).map(&:first).join.upcase
+    else
+      # Show Workspace Initials (e.g. for invitations)
+      account_initials(notification.account)
+    end
+  end
+
+  def notification_avatar_style(notification)
+    # Circle for people actions, Square for workspace actions
+    notification.event.params[:user_name].present? ? "rounded-full bg-teal-600" : "rounded-md bg-black"
+  end
 end

@@ -55,7 +55,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "faker", "~> 3.5"
+  gem "faker", "~> 3.6"
   gem "letter_opener_web", "~> 3.0"
   gem "web-console"
 end
